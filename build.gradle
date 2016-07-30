@@ -8,15 +8,13 @@ buildscript {
     }
 }
 
-group = 'springio'
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'gs-spring-boot-docker'
+    baseName = 'hello-gsa-spring'
     version =  '0.1.0'
 }
 
@@ -39,7 +37,7 @@ task wrapper(type: Wrapper) {
 apply plugin: 'docker'
 
 task buildDocker(type: Docker, dependsOn: build) {
-  push = true
+  push = false
   applicationName = jar.baseName
   dockerfile = file('src/main/docker/Dockerfile')
   doFirst {
