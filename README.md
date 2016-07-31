@@ -6,4 +6,4 @@ run the `spring` container via `$ docker run -p 8080:8080 --name hello-gsa-sprin
 
 run the `mysql` container via
 
-access the web application in chrome at the `DOCKER_HOST` IP through port 8080, (e.g. `http://192.168.99.100:8080/`)
+to ssh into the container: `$ docker exec -it hello-gsa-spring sh`

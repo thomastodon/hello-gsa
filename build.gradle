@@ -36,14 +36,14 @@ task wrapper(type: Wrapper) {
 
 apply plugin: 'docker'
 
-task buildDocker(type: Docker, dependsOn: build) {
-  push = false
-  applicationName = jar.baseName
-  dockerfile = file('src/main/docker/Dockerfile')
-  doFirst {
-    copy {
-      from jar
-      into stageDir
-    }
-  }
-}
+//task buildDocker(type: Docker, dependsOn: build) {
+//  push = false
+//  applicationName = jar.baseName
+//  dockerfile = file('src/main/docker/Dockerfile')
+//  doFirst {
+//    copy {
+//      from jar
+//      into stageDir
+//    }
+//  }
+//}
