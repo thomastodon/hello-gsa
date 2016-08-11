@@ -20,3 +20,5 @@ services:
       MYSQL_DATABASE: gaudi
       MYSQL_USER: gaudi
       MYSQL_PASSWORD: gaudi
+    ports:
+    - "3306:3306"

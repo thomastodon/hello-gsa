@@ -3,19 +3,19 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath("se.transmode.gradle:gradle-docker:1.2")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "spring-boot"
+apply plugin: "docker"
 
 jar {
-    baseName = 'hello-gsa-spring'
-    version =  '0.1.0'
+    baseName = "hello-gsa-spring"
+    version =  "0.1.0"
 }
 
 repositories {
@@ -27,19 +27,22 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile "mysql:mysql-connector-java:5.1.34"
+    compile("org.projectlombok:lombok:1.16.10")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = "2.3"
 }
 
-apply plugin: 'docker'
 
 //task buildDocker(type: Docker, dependsOn: build) {
 //  push = false
 //  applicationName = jar.baseName
-//  dockerfile = file('src/main/docker/Dockerfile')
+//  dockerfile = file("src/main/docker/Dockerfile")
 //  doFirst {
 //    copy {
 //      from jar

@@ -3,6 +3,7 @@ package hello;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,10 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApplicationControllerTest {
     private MockMvc mockMvc;
     private ApplicationController subject;
+    @Mock ApplicationService mockApplicationService;
 
     @Before
     public void setup() {
-        subject = new ApplicationController();
+        subject = new ApplicationController(mockApplicationService);
         mockMvc = MockMvcBuilders.standaloneSetup(subject).build();
     }
 
