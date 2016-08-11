@@ -20,7 +20,6 @@ public class ApplicationController {
 
     @RequestMapping(value = "/structures", method = RequestMethod.POST)
     public ResponseEntity<?> post(@RequestBody String input) {
-        System.out.println(input);
         Structure structure = applicationService.postStructure(input);
 
         // TODO: use post for object
