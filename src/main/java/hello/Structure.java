@@ -1,14 +1,27 @@
 package hello;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="structure")
 public class Structure {
-    private int id;
+    @Id
+    private String id;
     private long postDate;
     private int mass;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "structure", cascade = CascadeType.ALL)
+    private Set<Node> nodes;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "structure", cascade = CascadeType.ALL)
+    private Set<Element> elements;
 }
+
+// TODO: can't use @Data with my one-to-many relationship

@@ -2,11 +2,9 @@ package hello;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ApplicationController {
@@ -18,13 +16,24 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @RequestMapping(value = "/structures", method = RequestMethod.POST)
+    @RequestMapping(value = "/structure", method = RequestMethod.POST)
     public ResponseEntity<?> post(@RequestBody String input) {
         Structure structure = applicationService.postStructure(input);
 
         // TODO: use post for object
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+            value = "/structure/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public Structure get(@PathVariable(value = "id") final String id) {
+        Structure structure = applicationService.getStructure(id);
+        return structure;
     }
 
     @RequestMapping("/")
