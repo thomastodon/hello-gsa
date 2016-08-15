@@ -1,0 +1,13 @@
+pan
+<br>
+rotate
+<br>
+select
+<br>
+zoom extents
+<br>
+isolate
+<br>
+hide
+<br>
+show all

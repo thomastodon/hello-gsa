@@ -1,0 +1,140 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-item/all-imports.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/image-icons.html">
+
+<dom-module id="queue-item">
+
+  <link rel="import" type="css" href="../paper-item/paper-item-shared.css">
+
+  <style>
+
+    :host {
+      position: relative;
+      color: #37474F;
+      padding: 0 12px 0 12px;
+
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      @apply(--paper-font-subhead);
+
+      @apply(--paper-item);
+      @apply(--queue-item);
+    }
+
+    .content-icon {
+      width: var(--paper-item-icon-width, 56px);
+    }
+
+    div#contentIcon {
+      border-radius: 100%;
+      behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+      width: 26px;
+      height: 26px;
+      padding: 8px;
+
+      border: 1px solid #37474F;
+      color: #37474F;
+      font-size: 14px;
+      font-weight: lighter;
+      text-align: center;
+    }
+
+    paper-item-body {
+      margin: 0 16px 0 16px;
+    }
+
+    paper-spinner {   
+      --paper-spinner-layer-1-color: #00BFA5;
+      --paper-spinner-layer-2-color: #1DE9B6;
+      --paper-spinner-layer-3-color: #00BFA5;
+      --paper-spinner-layer-4-color: #1DE9B6;
+      position: absolute;
+      right: 10px;
+      top: 24px;
+      height: 24px;
+      width: 24px;
+      display: none;
+    }
+
+    *:not(:first-child):not(:last-child) {
+      margin-right: 0px;
+    }
+
+    iron-icon {
+      position: absolute;
+      right: 10px;
+      top: 24px;
+    }
+
+  </style>
+
+  <template>
+    <div id="contentIcon">{{iter}}</div>  
+    <paper-item-body two-line>
+      <div>{{module}}</div>
+      <div secondary>{{secondary}}</div>
+    </paper-item-body>
+    <paper-spinner id="paperSpinner" active></paper-spinner>
+    <!-- <iron-icon id="ironIcon" icon="image:grain"></iron-icon> -->
+    <iron-icon id="ironIcon"></iron-icon>
+  </template>
+
+</dom-module>
+
+<script>
+
+(function() {
+
+  Polymer({
+
+    is: 'queue-item',
+
+    check_status: function() {
+      if (this.status=="COMPLETE") {
+        this.$.paperSpinner.style.display = "none";
+        this.$.ironIcon.style.color = "#37474F";
+        this.$.ironIcon.icon = "done-all";
+        this.$.ironIcon.style.display = "block";
+      } else if (this.status=="PENDING") {
+        this.$.paperSpinner.style.display = "none";
+        this.$.ironIcon.style.color = "#00BFA5";
+        this.$.ironIcon.icon = "image:grain";
+        this.$.ironIcon.style.display = "block";
+      } else if (this.status=="ACTIVE") {
+        this.$.ironIcon.style.display = "none";
+        this.$.paperSpinner.style.display = "block";
+      }
+    },
+
+    properties: {
+      module: String,
+      status: String,
+      iter: String,
+      primary: String,
+      secondary: String
+    },
+
+    hostAttributes: {
+      'role': 'listitem'
+    }
+
+  });
+
+})();
+
+</script>

@@ -1,0 +1,105 @@
+body {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 13px;
+	overflow: hidden;
+	/*margin: 10px;*/
+	height: 100%
+}
+
+.node square {
+	fill: #fff;
+	stroke: black;
+	stroke-width: 5px;
+/*	width: 100px;
+	height: 100px;*/
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+#canvas-pedigree{
+	width: 0%;
+	float: left;
+}
+
+#canvas-model{
+	width: 100%;
+	margin-left: 0%;
+}
+
+div.words{
+	position: absolute;
+    top: 24px;
+}
+
+#title {
+	color: #000000;
+	text-align: left;
+	position: relative;
+	font-size: 20px;
+	margin: 0px;
+}
+
+#text {
+	color: #000000;
+	text-align: justify;
+	position: relative;
+	margin: 0px;
+	width: 60%;
+}
+
+#info {
+	color: #000000;
+	text-align: left;
+	position: relative;
+	font-weight: bold;
+	margin: 0px;
+	padding-top: 6px;
+}
+
+div.legend {
+	color: #000000;
+	text-align: left;
+	position: fixed;left:0;bottom:0;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	opacity: 0.6;
+}
+
+#keys {
+	float: left;
+}
+
+#vals {
+	margin-left: 10px;
+	float: right;
+}
+
+img {
+	position: fixed;right:0;bottom:0;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	opacity: 0.3;
+}
+
+#select-marquee {
+  position:absolute;
+  /* initialize it offscreen */
+  top: -2px;
+  left: -2px;
+  z-index: 50;
+  height: 0px;
+  width: 10px;
+  background-color: rgba(250, 250, 250, 0.5);
+  border: dotted 1px #9a9a9a;
+  margin: 0;
+  padding: 0;
+  pointer-events:none;
+}

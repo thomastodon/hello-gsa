@@ -1,0 +1,14 @@
+{
+  "boss":      true,
+  "browser":   true,
+  "esnext":    true,
+  "expr":      true,
+  "indent":    2,
+  "lastsemic": true,
+  "newcap":    false,
+  "node":      true,
+  "onecase":   true,
+  "quotmark":  "single",
+  "unused":    "vars",
+  "validthis": true
+}

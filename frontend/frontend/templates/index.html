@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>// model</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}" />
+
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-59740481-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/objectSelection.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/hotkey.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/build/three.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/arupControls.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/marqueeSelection.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/examples/js/Detector.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/examples/js/renderers/CanvasRenderer.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/threejs/examples/js/renderers/Projector.js') }}"></script>
+
+</head>
+
+<body>
+
+	<div id="canvas-pedigree">
+
+	</div>
+
+	<div id="canvas-model">
+		<div class="words">
+			<h1 id="title"></h1>
+			<p id="text"></p>
+			<div id="info"></div>
+			<div class="legend">
+				<div id="keys"></div>
+				<div id="vals"></div>
+			</div>
+		</div>
+		<div id="select-marquee"></div>
+
+		<script>
+			$('#title').load("{{ url_for('static', filename='txt/title.txt') }}");
+			$('#text').load("{{ url_for('static', filename='txt/desc.txt') }}");
+			$('#keys').load("{{ url_for('static', filename='txt/keys.txt') }}");
+			$('#vals').load("{{ url_for('static', filename='txt/vals.txt') }}");
+		</script>
+
+
+		<script type=text/javascript>
+		// variable declarations
+		var container, stats;
+		var camera, scene, projector, raycaster, renderer;
+		var particleMaterial;
+		var canvas, context, texture;
+		var mouse = new THREE.Vector2();
+		var objects = [];
+		var controls;
+		var attr = [];
+		var mousedown = false;
+		var mouseup = true;
+		var offset = {};
+		      offset.x = 10;
+		      offset.y = 10;
+		var marquee = $("#select-marquee");
+		var canvasWidth = document.getElementById('canvas-model').offsetWidth
+		var canvasHeight = document.getElementById('canvas-model').offsetHeight
+
+		// scene
+		scene = new THREE.Scene();
+
+		// renderer
+		renderer = new THREE.CanvasRenderer( { antialias: false } );
+		renderer.setSize( canvasWidth, window.innerHeight );	
+		renderer.setClearColor( 0xffffff, 1);
+
+		// get JSON
+		$.ajax({
+			url: "http://localhost:8081/structure/canopy",
+			dataType: 'json',
+			success: function(data) {
+
+				console.log(data);
+
+				var geometryParent = new THREE.Object3D();
+				var x = [];
+				var y = [];
+				var z = [];
+				var x1, y1, z1, x2, y2, z2, xr, yr, zr, r;
+
+				for (i in data['elements']) {
+
+					// parse out data from JSON
+					var point1 = data['elements'][i]['node1'];
+					var point2 = data['elements'][i]['node2'];
+					// var color = data['elements'][i]['def']['colour'];
+					var material = new THREE.LineBasicMaterial({
+				    	color: new THREE.Color("rgb(220,220,220)"),
+				    	elementwidth: 4
+					});
+
+					// store end points
+					x1 = parseFloat(point1['x']);
+					y1 = parseFloat(point1['y']);
+					z1 = parseFloat(point1['z']);
+					x2 = parseFloat(point2['x']);
+					y2 = parseFloat(point2['y']);
+					z2 = parseFloat(point2['z']);
+					x.push(x1);
+					y.push(y1);
+					z.push(z1);
+
+					// add elements
+					var geometry = new THREE.Geometry();
+					var element = new THREE.Line(geometry, material);
+						geometry.vertices.push(new THREE.Vector3(x1,y1,z1));
+						geometry.vertices.push(new THREE.Vector3(x2,y2,z2));
+
+					// store associated attribute values with element objects
+					// for (i = 2 ; i < (attr.length); i++){
+						element['analysisRes'] = data['elements'][i]['res'];
+					// }
+
+					element.prevColor = element.material.color.getHex();
+
+					// elements enter scene unselected
+					element.selected = false;
+
+					// store all element objects
+					objects.push(element);
+
+					// add the element to the parent element
+					geometryParent.add(element);
+
+				}
+				
+				x.sort(sortNumber);
+				y.sort(sortNumber);
+				z.sort(sortNumber);
+
+				// calculate model radii
+				xr=(x[x.length-1]-x[0])*0.5;
+				yr=(y[y.length-1]-y[0])*0.5;
+				zr=(z[z.length-1]-z[0])*0.5;
+				r = Math.max(xr,yr,zr);
+
+				// move model to origin
+				xm=xr+x[0];
+				ym=yr+y[0];
+				zm=zr+z[0];
+				// geometryParent.position.set(-xm,-ym,-zm);
+
+				// add geo to scene
+				scene.add(geometryParent);
+
+				// position camera to extents of model
+				camera.position.x = xm + Math.pow(1/3,0.5)*r*16;
+				camera.position.y = ym + Math.pow(1/3,0.5)*r*16;
+				camera.position.z = zm + Math.pow(1/3,0.5)*r*16;
+				controls.target = new THREE.Vector3(xm,ym,zm);
+
+				animate();
+			},
+			timeout: 1000000
+		});
+
+		// camera
+		camera = new THREE.PerspectiveCamera(10, canvasWidth / window.innerHeight,1,1000000);
+		camera.up = new THREE.Vector3(0,0,1);
+
+		// controls
+		controls = new THREE.OrbitControls( camera );
+		controls.zoomSpeed = 2;
+
+		// projector
+		projector = new THREE.Projector();
+
+		// container
+		container = document.getElementById( 'canvas-model' );
+		container.appendChild( renderer.domElement );
+
+		// listening
+		window.addEventListener( 'resize', onWindowResize, false );
+
+
+		function sortNumber(a,b) {
+		    return a - b;
+		}
+
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+		}
+
+		function animate() {
+			requestAnimationFrame( animate );
+			renderer.render( scene, camera );
+			controls.update();
+		}
+
+		function getHeight(element) {
+			element.style.visibility = "hidden";
+			document.body.appendChild(element);
+			var height = element.offsetHeight + 0;
+			document.body.removeChild(element);
+			element.style.visibility = "visible";
+			return height;
+		}
+
+		</script>
+
+
+	</div>
+</body>
+</html>
