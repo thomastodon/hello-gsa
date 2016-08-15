@@ -51,6 +51,8 @@ function onDocumentMouseDown( event ) {
 
 		// current object
 		var obj = intersects[ 0 ].object;
+
+		console.log(obj);
 		
 		// if previous selection exists, revert to original color
 		prevObj = prev[0];

@@ -1,5 +1,6 @@
 package hello;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,10 @@ public class Structure {
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "structure", cascade = CascadeType.ALL)
     private Set<Element> elements;
+
+    @JsonIgnore
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "structure", cascade = CascadeType.ALL)
+    private Set<ForceMoment> forceMoments;
 }
 
 // TODO: can't use @Data with my one-to-many relationship

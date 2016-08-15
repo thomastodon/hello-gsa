@@ -42,7 +42,7 @@ public class ApplicationController {
             method = RequestMethod.GET
     )
     public String home() {
-        return "static/index.html";
+        return "Hello Bourgeois Pig";
     }
 
 }

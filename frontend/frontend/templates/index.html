@@ -31,9 +31,7 @@
 
 <body>
 
-	<div id="canvas-pedigree">
-
-	</div>
+	<div id="canvas-pedigree"></div>
 
 	<div id="canvas-model">
 		<div class="words">
@@ -101,10 +99,11 @@
 					// parse out data from JSON
 					var point1 = data['elements'][i]['node1'];
 					var point2 = data['elements'][i]['node2'];
-					// var color = data['elements'][i]['def']['colour'];
+					var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 					var material = new THREE.LineBasicMaterial({
-				    	color: new THREE.Color("rgb(220,220,220)"),
-				    	elementwidth: 4
+				    	// color: new THREE.Color("rgb(220,220,220)"),
+				    	color: new THREE.Color('#'+Math.floor(Math.random()*16777215).toString(16)),
+				    	elementwidth: 8
 					});
 
 					// store end points
@@ -126,7 +125,7 @@
 
 					// store associated attribute values with element objects
 					// for (i = 2 ; i < (attr.length); i++){
-						element['analysisRes'] = data['elements'][i]['res'];
+					element['analysisRes'] = data['elements'][i]['forceMoment'];
 					// }
 
 					element.prevColor = element.material.color.getHex();

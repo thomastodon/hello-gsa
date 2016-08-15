@@ -1,5 +1,6 @@
 package hello;
 
+import org.omg.CORBA.DoubleHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -7,12 +8,15 @@ import org.springframework.stereotype.Component;
 public class ApplicationTranslator {
 
     private final NodeRepository nodeRepository;
+    private final ElementRepository elementRepository;
 
     @Autowired
     public ApplicationTranslator(
-            NodeRepository nodeRepository
+            NodeRepository nodeRepository,
+            ElementRepository elementRepository
     ) {
         this.nodeRepository = nodeRepository;
+        this.elementRepository = elementRepository;
     }
 
     public Node inputToDomain(Structure structure, Node node, String[] fields) {
@@ -33,6 +37,17 @@ public class ApplicationTranslator {
         element.setNode1(nodeRepository.findById(Integer.parseInt(fields[7])));
         element.setNode2(nodeRepository.findById(Integer.parseInt(fields[8])));
         return element;
+    }
+
+    public ForceMoment inputToDomain(Structure structure, ForceMoment forceMoment, String[] fields) {
+//        force.setStructure(structure);
+        forceMoment.setElement(elementRepository.findById(Integer.parseInt(fields[1])));
+        forceMoment.setResultCaseId(Integer.parseInt(fields[2]));
+        forceMoment.setPosition(Integer.parseInt(fields[3]));
+        forceMoment.setFx(Double.parseDouble(fields[4]));
+        forceMoment.setFy(Double.parseDouble(fields[5]));
+        forceMoment.setFz(Double.parseDouble(fields[6]));
+        return forceMoment;
     }
 }
 // TODO: break parser out into separate service for scaling?

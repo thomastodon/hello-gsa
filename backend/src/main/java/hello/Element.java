@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,13 +26,16 @@ public class Element {
     private int sectionPropertyId;
     private int groupId;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "node1Id")
     private Node node1;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "node2Id")
     private Node node2;
+
+    @OneToOne(fetch=FetchType.LAZY, mappedBy="element", cascade=CascadeType.ALL)
+    private ForceMoment forceMoment;
 }
 
 // TODO: could use ManyToMany and not have two node columns, or use ManyToOne with different columns
