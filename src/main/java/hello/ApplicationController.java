@@ -25,6 +25,7 @@ public class ApplicationController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "http://localhost:5000")
     @RequestMapping(
             value = "/structure/{id}",
             method = RequestMethod.GET,
@@ -36,9 +37,12 @@ public class ApplicationController {
         return structure;
     }
 
-    @RequestMapping("/")
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET
+    )
     public String home() {
-        return "Hello Bourgeois Pig!";
+        return "static/index.html";
     }
 
 }
