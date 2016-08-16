@@ -30,9 +30,21 @@ public class ApplicationController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public Structure get(@PathVariable(value = "id") final String id) {
+    public Structure getStructure(@PathVariable(value = "id") final String id) {
         Structure structure = applicationService.getStructure(id);
         return structure;
+    }
+
+    @CrossOrigin(origins = "http://localhost:5000")
+    @RequestMapping(
+            value = "/force-moment/{element-id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ForceMoment getForceMoment(@PathVariable(value = "element-id") final String elementId) {
+        ForceMoment forceMoment = applicationService.getForceMoment(elementId);
+        return forceMoment;
     }
 
     @RequestMapping(

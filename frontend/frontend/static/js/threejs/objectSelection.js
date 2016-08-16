@@ -70,6 +70,7 @@ function onDocumentMouseDown( event ) {
 		// render analysis result values to the canvas
 		document.getElementById("info").innerHTML = "";
 		for (var key in analysisRes) {
+			if (key == 'id') {continue}
 			if (analysisRes.hasOwnProperty(key)) {
 				document.getElementById("info").innerHTML += key + ': ' + analysisRes[key];
 				document.getElementById("info").innerHTML += '<br>';

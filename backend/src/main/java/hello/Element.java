@@ -27,11 +27,11 @@ public class Element {
     private int groupId;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "node1Id")
+    @JoinColumn(name = "node_1_id")
     private Node node1;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "node2Id")
+    @JoinColumn(name = "node_2_id")
     private Node node2;
 
     @OneToOne(fetch=FetchType.LAZY, mappedBy="element", cascade=CascadeType.ALL)

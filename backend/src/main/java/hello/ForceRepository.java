@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ForceRepository extends JpaRepository<ForceMoment, Long> {
+    ForceMoment findByElement(Element element);
 }

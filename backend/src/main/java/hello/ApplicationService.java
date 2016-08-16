@@ -12,16 +12,19 @@ public class ApplicationService {
     private final ApplicationTranslator applicationTranslator;
     private final StructureRepository structureRepository;
     private final ForceRepository forceRepository;
+    private final ElementRepository elementRepository;
 
     @Autowired
     public ApplicationService(
             ApplicationTranslator applicationTranslator,
             StructureRepository structureRepository,
-            ForceRepository forceRepository
+            ForceRepository forceRepository,
+            ElementRepository elementRepository
     ) {
         this.applicationTranslator = applicationTranslator;
         this.structureRepository = structureRepository;
         this.forceRepository = forceRepository;
+        this.elementRepository = elementRepository;
     }
 
     public Structure postStructure(String input) {
@@ -78,6 +81,10 @@ public class ApplicationService {
 
     public Structure getStructure(String id) {
         return structureRepository.findOne(id);
+    }
+
+    public ForceMoment getForceMoment(String elementId) {
+        return forceRepository.findByElement(elementRepository.findById(Integer.parseInt(elementId)));
     }
 }
 
