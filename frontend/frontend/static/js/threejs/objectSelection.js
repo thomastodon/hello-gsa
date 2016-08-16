@@ -53,6 +53,9 @@ function onDocumentMouseDown( event ) {
 		var obj = intersects[ 0 ].object;
 
 		console.log(obj);
+
+		// TODO: hit endpoint for single forceMoment here
+		// TODO: don't include forceMoments on Element Json response
 		
 		// if previous selection exists, revert to original color
 		prevObj = prev[0];

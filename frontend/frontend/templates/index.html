@@ -18,6 +18,7 @@
 	</script>
 
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='node_modules/chroma-js/chroma.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/threejs/objectSelection.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/threejs/hotkey.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/threejs/build/three.min.js') }}"></script>
@@ -94,15 +95,22 @@
 				var z = [];
 				var x1, y1, z1, x2, y2, z2, xr, yr, zr, r;
 
+				chromaScale = chroma.scale([
+					'purple',
+					'blue',
+					'green',
+					'yellow',
+					'orange',
+					'red']).domain([30000,-30000]);
+
 				for (i in data['elements']) {
 
 					// parse out data from JSON
 					var point1 = data['elements'][i]['node1'];
 					var point2 = data['elements'][i]['node2'];
-					var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+					var color = chromaScale(data['elements'][i]['forceMoment']['fx']).hex();
 					var material = new THREE.LineBasicMaterial({
-				    	// color: new THREE.Color("rgb(220,220,220)"),
-				    	color: new THREE.Color('#'+Math.floor(Math.random()*16777215).toString(16)),
+				    	color: new THREE.Color(color),
 				    	elementwidth: 8
 					});
 

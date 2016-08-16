@@ -16,12 +16,10 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
+    // TODO: use post for object
     @RequestMapping(value = "/structure", method = RequestMethod.POST)
     public ResponseEntity<?> post(@RequestBody String input) {
         Structure structure = applicationService.postStructure(input);
-
-        // TODO: use post for object
-
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -44,7 +42,6 @@ public class ApplicationController {
     public String home() {
         return "Hello Bourgeois Pig";
     }
-
 }
 
-
+// TODO: endpoints for other results
