@@ -67,14 +67,8 @@ public class ApplicationControllerTest {
     }
 
     @Test
-    public void getForceMoment() throws Exception {
+    public void getForceMoment_mapping() throws Exception {
         mockMvc.perform(get("/force-moment/2340"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void getHelloPig() throws Exception {
-        mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 }
