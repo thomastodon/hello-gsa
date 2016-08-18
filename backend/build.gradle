@@ -38,6 +38,11 @@ task wrapper(type: Wrapper) {
     gradleVersion = "2.3"
 }
 
+test {
+    afterTest { desc, result ->
+        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
 
 //task buildDocker(type: Docker, dependsOn: build) {
 //  push = false
