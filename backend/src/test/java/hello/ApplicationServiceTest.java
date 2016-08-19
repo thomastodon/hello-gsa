@@ -3,21 +3,12 @@ package hello;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationServiceTest {
@@ -64,7 +55,7 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    public void postStructure_addsCorrectNumberOfNodes() {
+    public void postStructure_translatesCorrectNumberOfNodes() {
         subject.postStructure(input);
 
         verify(mockApplicationTranslator, times(6)).inputToDomain(
@@ -75,7 +66,7 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    public void postStructure_addsCorrectNumberOfElements() {
+    public void postStructure_translatesCorrectNumberOfElements() {
         subject.postStructure(input);
 
         verify(mockApplicationTranslator, times(5)).inputToDomain(
@@ -86,7 +77,7 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    public void postStructure_addsCorrectNumberOfForces() {
+    public void postStructure_translatesCorrectNumberOfForces() {
         subject.postStructure(input);
 
         verify(mockApplicationTranslator, times(5)).inputToDomain(
@@ -95,4 +86,5 @@ public class ApplicationServiceTest {
                 any(String[].class)
         );
     }
+
 }
