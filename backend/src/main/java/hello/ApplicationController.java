@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class ApplicationController {
@@ -12,15 +13,17 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     @Autowired
-    public ApplicationController(ApplicationService applicationService) {
+    public ApplicationController(
+            ApplicationService applicationService
+    ) {
         this.applicationService = applicationService;
     }
 
     // TODO: use post for object
     @RequestMapping(value = "/structure", method = RequestMethod.POST)
-    public ResponseEntity<?> post(@RequestBody String input) {
+    public ResponseEntity<Structure> postStructure(@RequestBody String input) {
         Structure structure = applicationService.postStructure(input);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<Structure>(structure, HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "http://localhost:5000")

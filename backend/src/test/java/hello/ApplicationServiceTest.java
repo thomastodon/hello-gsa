@@ -3,12 +3,22 @@ package hello;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
+import java.util.List;
+import java.util.Random;
+
+import static java.lang.Math.random;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationServiceTest {
@@ -55,28 +65,6 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    public void postStructure_translatesCorrectNumberOfNodes() {
-        subject.postStructure(input);
-
-        verify(mockApplicationTranslator, times(6)).inputToDomain(
-                any(Structure.class),
-                any(Node.class),
-                any(String[].class)
-        );
-    }
-
-    @Test
-    public void postStructure_translatesCorrectNumberOfElements() {
-        subject.postStructure(input);
-
-        verify(mockApplicationTranslator, times(5)).inputToDomain(
-                any(Structure.class),
-                any(Element.class),
-                any(String[].class)
-        );
-    }
-
-    @Test
     public void postStructure_translatesCorrectNumberOfForces() {
         subject.postStructure(input);
 
@@ -87,4 +75,50 @@ public class ApplicationServiceTest {
         );
     }
 
+    @Test
+    public void postStructure_addsCorrectNumberOfNodesAndElementToStructure() {
+        when(mockApplicationTranslator.inputToDomain(
+                any(Structure.class),
+                any(Element.class),
+                any(String[].class)
+        )).thenReturn(
+                new Element(),
+                new Element(),
+                new Element(),
+                new Element(),
+                new Element()
+        );
+
+        when(mockApplicationTranslator.inputToDomain(
+                any(Structure.class),
+                any(Node.class),
+                any(String[].class)
+        )).thenReturn(
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node()
+        );
+
+        Structure structure = subject.postStructure(input);
+
+        assertThat(structure.getElements().toArray().length, is(equalTo(5)));
+        assertThat(structure.getNodes().toArray().length, is(equalTo(6)));
+    }
+
+    @Test
+    public void getStructure() {
+        subject.getStructure("tall building");
+
+        verify(mockStructureRepository).findOne(anyString());
+    }
+
+    @Test
+    public void getForceMoment() {
+        subject.getForceMoment("3134");
+
+        verify(mockForceRepository).findByElement(any(Element.class));
+    }
 }

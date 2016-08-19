@@ -1,39 +1,75 @@
 package hello;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
-
+@RunWith(MockitoJUnitRunner.class)
 public class ApplicationTranslatorTest {
 
+    private ApplicationTranslator subject;
+    @Mock ElementRepository mockElementRepository;
+    @Mock NodeRepository mockNodeRepository;
+
+    @Before
+    public void setup() {
+        subject = new ApplicationTranslator(
+                mockNodeRepository,
+                mockElementRepository
+        );
+    }
 
     @Test
-    public void postStructure_insertsNodes() {
+    public void inputToDomain_translatesNode() {
+        String[] nodeFields = new String[] {"NODE","3327","","NO_RGB","16.6620","1.50000","22.3340"};
 
-        Structure structure = new Structure();
-        ArgumentCaptor<Structure> argumentCaptor = ArgumentCaptor.forClass(Structure.class);
-        when(mockStructureRepository.save(argumentCaptor.capture())).thenReturn(structure);
+        Node actualNode = subject.inputToDomain(new Structure(), new Node(), nodeFields);
 
-        Set<Node> nodes = new HashSet<Node>();
-        Node node3327 = Node.builder().id(3327).x(16.6620).y(1.50000).z(22.3340).build();
-        Node node3326 = Node.builder().id(3326).x(13.8710).y(1.50000).z(21.6450).build();
-        Node node3325 = Node.builder().id(3325).x(55.2660).y(37.0000).z(17.7580).build();
-        Node node3324 = Node.builder().id(3324).x(0.000000).y(37.0000).z(3.09800).build();
-        Node node3323 = Node.builder().id(3323).x(0.000000).y(37.0000).z(6.19600).build();
-        Node node3322 = Node.builder().id(3322).x(0.150017).y(37.0000).z(9.28700).build();
-        nodes.addAll(Arrays.asList(node3322, node3323, node3324, node3325, node3326, node3327));
-//        Structure structure = new Structure();
-//        structure.setNodes(nodes);
+        assertThat(actualNode.getId(), is(equalTo(3327)));
+        assertThat(actualNode.getX(), is(equalTo(16.6620)));
+        assertThat(actualNode.getY(), is(equalTo(1.50000)));
+        assertThat(actualNode.getZ(), is(equalTo(22.3340)));
+    }
 
-        subject.postStructure(input);
+    @Test
+    public void inputToDomain_translatesElement() {
+        String[] elementFields = new String[] {"EL","2430","","NO_RGB","BEAM","211","40","3327","3326"};
+        Node node1 = new Node().builder().id(3327).build();
+        Node node2 = new Node().builder().id(3326).build();
+        doReturn(node1).when(mockNodeRepository).findById(3327);
+        doReturn(node2).when(mockNodeRepository).findById(3326);
 
-        assertThat(argumentCaptor.getValue().getNodes(), equalTo(nodes));
+        Element actualElement = subject.inputToDomain(new Structure(), new Element(), elementFields);
+
+        assertThat(actualElement.getId(), is(equalTo(2430)));
+        assertThat(actualElement.getGroupId(), is(equalTo(40)));
+        assertThat(actualElement.getNode1(), is(equalTo(node1)));
+        assertThat(actualElement.getNode2(), is(equalTo(node2)));
+        assertThat(actualElement.getSectionPropertyId(), is(equalTo(211)));
+        assertThat(actualElement.getType(), is(equalTo("BEAM")));
+    }
+
+    @Test
+    public void inputToDomain_translatesForce() {
+        String[] forceMomentFields = new String[] {"FORCE","2430","1","0","23965.4","-30.5844","109.418"};
+        Element element = new Element().builder().id(2430).build();
+        doReturn(element).when(mockElementRepository).findById(anyInt());
+
+        ForceMoment actualForceMoment = subject.inputToDomain(new Structure(), new ForceMoment(), forceMomentFields);
+
+        assertThat(actualForceMoment.getPosition(), is(equalTo(0)));
+        assertThat(actualForceMoment.getResultCaseId(), is(equalTo(1)));
+        assertThat(actualForceMoment.getFx(), is(equalTo(23965.4)));
+        assertThat(actualForceMoment.getFy(), is(equalTo(-30.5844)));
+        assertThat(actualForceMoment.getFz(), is(equalTo(109.418)));
+        assertThat(actualForceMoment.getElement(), is(equalTo(element)));
     }
 }

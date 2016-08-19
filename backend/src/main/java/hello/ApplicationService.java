@@ -76,7 +76,7 @@ public class ApplicationService {
             lineNumber += 1;
         }
 
-        return null;
+        return structure;
     }
 
     public Structure getStructure(String id) {
