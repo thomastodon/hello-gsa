@@ -26,11 +26,11 @@ public class Node {
     private Double y;
     private Double z;
 
-    @JsonIgnore
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "node1", cascade = CascadeType.ALL)
-    private Set<Element> node1Elements;
-
-    @JsonIgnore
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "node2", cascade = CascadeType.ALL)
-    private Set<Element> node2Elements;
+//    @JsonIgnore
+//    @OneToMany(fetch=FetchType.LAZY, mappedBy = "node1", cascade = CascadeType.ALL)
+//    private Set<Element> node1Elements;
+//
+//    @JsonIgnore
+//    @OneToMany(fetch=FetchType.LAZY, mappedBy = "node2", cascade = CascadeType.ALL)
+//    private Set<Element> node2Elements;
 }

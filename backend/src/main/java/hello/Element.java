@@ -26,17 +26,19 @@ public class Element {
     private String type;
     private int sectionPropertyId;
     private int groupId;
+    private int node1Id;
+    private int node2Id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "node_1_id")
-    private Node node1;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "node_2_id")
-    private Node node2;
-
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="element", cascade=CascadeType.ALL)
-    private ForceMoment forceMoment;
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "node_1_id")
+//    private Node node1;
+//
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "node_2_id")
+//    private Node node2;
+//
+//    @OneToOne(fetch=FetchType.LAZY, mappedBy="element", cascade=CascadeType.ALL)
+//    private ForceMoment forceMoment;
 }
 
 // TODO: could use ManyToMany and not have two node columns, or use ManyToOne with different columns

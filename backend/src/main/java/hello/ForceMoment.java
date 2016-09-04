@@ -21,16 +21,13 @@ public class ForceMoment {
     @JoinColumn(name = "structure_id")
     private Structure structure;
 
-    @JsonIgnore
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="element_id")
-    private Element element;
-
+    private int elementId;
     private int resultCaseId;
     private int position;
-    private Double fx;
-    private Double fy;
-    private Double fz;
+    private double fx;
+    private double fy;
+    private double fz;
+
 }
 
 // TODO: composite primary key???

@@ -10,3 +10,5 @@ spring:
     password: gaudi
 
 server.port: 8081
+
+allowed-origins: http://localhost:5000

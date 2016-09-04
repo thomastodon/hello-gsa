@@ -55,20 +55,20 @@ public class ApplicationControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void getForceMoment_delegatesToService() {
-        ForceMoment expectedForceMoment = new ForceMoment();
-        doReturn(expectedForceMoment).when(mockApplicationService).getForceMoment(anyString());
+//    @Test
+//    public void getForceMoment_delegatesToService() {
+//        ForceMoment expectedForceMoment = new ForceMoment();
+//        doReturn(expectedForceMoment).when(mockApplicationService).getForceMoment(anyString());
+//
+//        ForceMoment actualForceMoment = subject.getForceMoment("34");
+//
+//        verify(mockApplicationService).getForceMoment("34");
+//        assertThat(actualForceMoment, equalTo(expectedForceMoment));
+//    }
 
-        ForceMoment actualForceMoment = subject.getForceMoment("34");
-
-        verify(mockApplicationService).getForceMoment("34");
-        assertThat(actualForceMoment, equalTo(expectedForceMoment));
-    }
-
-    @Test
-    public void getForceMoment_mapping() throws Exception {
-        mockMvc.perform(get("/force-moment/2340"))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    public void getForceMoment_mapping() throws Exception {
+//        mockMvc.perform(get("/force-moment/2340"))
+//                .andExpect(status().isOk());
+//    }
 }
