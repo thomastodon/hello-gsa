@@ -9,71 +9,77 @@ import java.util.Set;
 @Service
 public class ApplicationService {
 
-    private final StructureRepository structureRepository;
+    private final ForceMomentDao forceMomentDao;
+    private final StructureDao structureDao;
+    private final ElementDao elementDao;
+    private final NodeDao nodeDao;
 
     @Autowired
     public ApplicationService(
-            StructureRepository structureRepository) {
-        this.structureRepository = structureRepository;
+            ForceMomentDao forceMomentDao, StructureDao structureDao, ElementDao elementDao, NodeDao nodeDao) {
+        this.forceMomentDao = forceMomentDao;
+        this.structureDao = structureDao;
+        this.elementDao = elementDao;
+        this.nodeDao = nodeDao;
     }
 
     // TODO step1: executor? step 2: rabbit or other MQ?
     public Structure postStructure(String input) {
 
-        Structure structure = new Structure();
-        structure.setId("canopy");
+        StructureEntity structureEntity = new StructureEntity();
+        structureEntity.setId("canopy");
+        structureDao.save(structureEntity);
 
-        Set<Node> nodes = new HashSet<Node>();
         String[] lines = input.split("\\r?\\n");
         int lineNumber = 0;
+
+        Set<NodeEntity> nodes = new HashSet<>();
         while (true) {
             String line = lines[lineNumber];
             String fields[] = line.split(",");
             if (fields[0].equals("NODE")) {
-                Node node = NodeCsvLineParser.inputToDomain(structure, fields);
+                NodeEntity node = NodeCsvLineParser.inputToDomain(structureEntity.getId(), fields);
                 nodes.add(node);
             } else if (fields[0].equals("EL")) {
-                structure.setNodes(nodes);
+                nodeDao.save(nodes);
                 break;
             }
             lineNumber += 1;
         }
 
-        Set<Element> elements = new HashSet<Element>();
+        Set<ElementEntity> elements = new HashSet<>();
         while (true) {
             String line = lines[lineNumber];
             String fields[] = line.split(",");
             if (fields[0].equals("EL")) {
-                Element element = ElementCsvLineParser.inputToDomain(structure, fields);
+                ElementEntity element = ElementCsvLineParser.inputToDomain(structureEntity.getId(), fields);
                 elements.add(element);
             } else {
-                structure.setElements(elements);
+                elementDao.save(elements);
                 break;
             }
             lineNumber += 1;
         }
 
-        Set<ForceMoment> forces = new HashSet<>();
+        Set<ForceMomentEntity> forceMoments = new HashSet<>();
         while (true) {
             String line = lines[lineNumber];
             String fields[] = line.split(",");
             if (fields[0].equals("FORCE") && fields[3].equals("0")) {
-                ForceMoment forceMoment = ForceMomentCsvLineParser.inputToDomain(structure, fields);
-                forces.add(forceMoment);
+                ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(structureEntity.getId(), fields);
+                forceMoments.add(forceMoment);
             } else if (fields[0].equals("MOMENT")) {
-                structure.setForceMoments(forces);
+                forceMomentDao.save(forceMoments);
                 break;
             }
             lineNumber += 1;
         }
 
-        structureRepository.save(structure);
-
-        return structure;
+        return structureDao.findById("canopy");
     }
 
     public Structure getStructure(String id) {
-        return structureRepository.findOne(id);
+        return structureDao.findById(id);
     }
 }
 

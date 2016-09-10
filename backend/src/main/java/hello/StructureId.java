@@ -1,10 +1,5 @@
 package hello;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
-/**
- * Created by thomasshouler on 8/19/16.
- */
 public class StructureId {
     private final String id;
 

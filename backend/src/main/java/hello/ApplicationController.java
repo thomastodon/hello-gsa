@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class ApplicationController {
@@ -36,19 +35,6 @@ public class ApplicationController {
         Structure structure = applicationService.getStructure(id);
         return structure;
     }
-
-//     TODO put in config, lose crossorigin?? mayeb differently?
-//    @CrossOrigin(origins = "http://localhost:5000")
-//    @RequestMapping(
-//            value = "/force-moment/{element-id}",
-//            method = RequestMethod.GET,
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    @ResponseBody
-//    public ForceMoment getForceMoment(@PathVariable(value = "element-id") final String elementId) {
-//        ForceMoment forceMoment = applicationService.getForceMoment(elementId);
-//        return forceMoment;
-//    }
 }
 
 // TODO: endpoints for other results

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NodeCsvLineParser {
 
-    public static Node inputToDomain(Structure structure, String[] fields) {
-        Node node = new Node();
-        node.setStructure(structure);
+    public static NodeEntity inputToDomain(String structureId, String[] fields) {
+        NodeEntity node = new NodeEntity();
+        node.setStructureId(structureId);
         node.setId(Integer.parseInt(fields[1]));
         node.setX(Double.parseDouble(fields[4]));
         node.setY(Double.parseDouble(fields[5]));

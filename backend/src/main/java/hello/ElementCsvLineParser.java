@@ -2,14 +2,12 @@ package hello;
 
 import org.springframework.stereotype.Component;
 
-// TODO make separate parsers for each object
-
 @Component
 public class ElementCsvLineParser {
 
-    public static Element inputToDomain(Structure structure, String[] fields) {
-        Element element = new Element();
-        element.setStructure(structure);
+    public static ElementEntity inputToDomain(String structureId, String[] fields) {
+        ElementEntity element = new ElementEntity();
+        element.setStructureId(structureId);
         element.setId(Integer.parseInt(fields[1]));
         element.setType(fields[4]);
         element.setSectionPropertyId(Integer.parseInt(fields[5]));
