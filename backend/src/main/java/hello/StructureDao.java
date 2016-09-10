@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,29 +44,26 @@ public class StructureDao {
 
         public Structure extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 
-            Map<String, Structure> structureMap = new HashMap<String, Structure>();
             Map<Integer, Element> elementMap = new HashMap<Integer, Element>();
             Map<Integer, Node> nodeMap = new HashMap<Integer, Node>();
             Structure structure = new Structure();
 
             while (resultSet.next()) {
-                String structureId = resultSet.getString("structure.id");
-                structure = structureMap.get(structureId);
-                if (structure == null) {
-                    structure = new Structure();
-                    structure.setId(structureId);
-                    structure.setPostDate(resultSet.getLong("structure.post_date"));
-                    structure.setMass(resultSet.getInt("structure.mass"));
-                    structureMap.put(structureId, structure);
+
+                if (resultSet.getRow() == 1) {
+                    structure = Structure.builder()
+                            .id(resultSet.getString("structure.id"))
+                            .postDate(resultSet.getLong("structure.post_date"))
+                            .mass(resultSet.getInt("structure.mass"))
+                            .build();
                 }
 
                 // TODO: collapse node1 and node2 into a list of nodes
-
                 Integer node1Id = resultSet.getInt("node_1.id");
                 Node node1 = nodeMap.get(node1Id);
                 if (node1 == null) {
                     node1 = Node.builder()
-                            .id(resultSet.getInt("node_1.id"))
+                            .id(node1Id)
                             .x(resultSet.getDouble("node_1.x"))
                             .y(resultSet.getDouble("node_1.y"))
                             .z(resultSet.getDouble("node_1.z"))
@@ -80,7 +75,7 @@ public class StructureDao {
                 Node node2 = nodeMap.get(node2Id);
                 if (node2 == null) {
                     node2 = Node.builder()
-                            .id(resultSet.getInt("node_2.id"))
+                            .id(node2Id)
                             .x(resultSet.getDouble("node_2.x"))
                             .y(resultSet.getDouble("node_2.y"))
                             .z(resultSet.getDouble("node_2.z"))
@@ -92,7 +87,7 @@ public class StructureDao {
                 Element element = elementMap.get(elementId);
                 if (element == null) {
                     element = Element.builder()
-                            .id(resultSet.getInt("element.id"))
+                            .id(elementId)
                             .node1(node1)
                             .node2(node2)
                             .sectionPropertyId(resultSet.getInt("element.section_property_id"))
@@ -101,6 +96,8 @@ public class StructureDao {
                             .build();
                     elementMap.put(elementId, element);
                 }
+
+                // TODO: include forces and moments
             }
             structure.setElements(new HashSet<Element>(elementMap.values()));
             return structure;
