@@ -16,9 +16,11 @@ import java.util.List;
 @Table(name = "element")
 public class ElementEntity implements Serializable {
 
-    // we're only relying on these annotations to create tables based
+    // we're only relying on JPA to create tables based
     // on our entities. relationship annotations also create a few
     // basic indexes
+
+    // inserts and queries are all managed with explicit sql
 
     @JsonIgnore
     @Id
