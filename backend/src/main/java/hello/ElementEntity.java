@@ -28,21 +28,46 @@ public class ElementEntity implements Serializable {
     private int sectionPropertyId;
     private int groupId;
 
-    @JsonIgnore
-    @Column(name = "node_2_id")
-    private int node1Id;
-
-    @JsonIgnore
-    @Column(name = "node_1_id")
-    private int node2Id;
-
-    @Transient
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "node_1_id",
+                    referencedColumnName = "id",
+                    insertable = false,
+                    updatable = false
+            ),
+            @JoinColumn(name = "structure_id",
+                    referencedColumnName = "structure_id",
+                    insertable = false,
+                    updatable = false
+            )
+    })
     private NodeEntity node1;
 
-    @Transient
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "node_2_id",
+                    referencedColumnName = "id",
+                    insertable = false,
+                    updatable = false
+            ),
+            @JoinColumn(name = "structure_id",
+                    referencedColumnName = "structure_id",
+                    insertable = false,
+                    updatable = false
+            )
+    })
     private NodeEntity node2;
 
     @Transient
+    @JsonIgnore
+    private int node1Id;
+
+    @Transient
+    @JsonIgnore
+    private int node2Id;
+
+    @Transient
+    @JsonIgnore
     private List<ForceMomentEntity> forceMoments;
 
 }
