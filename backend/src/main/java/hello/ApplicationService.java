@@ -17,10 +17,10 @@ public class ApplicationService {
     }
 
     // TODO step1: executor? step 2: rabbit or other MQ?
-    StructureEntity postStructure(String input) {
+    StructureEntity postStructure(String structureId, String input) {
 
         StructureEntity structureEntity = new StructureEntity();
-        structureEntity.setId("canopy");
+        structureEntity.setId(structureId);
 
         List<String> lines = Arrays.asList(input.split("\\r?\\n"));
 
@@ -61,7 +61,7 @@ public class ApplicationService {
         structureEntity.setNodes(new ArrayList<>(nodeMap.values()));
         structureDao.save(structureEntity);
 
-        return structureDao.findById("canopy");
+        return structureDao.findById(structureId);
     }
 
     StructureEntity getStructure(String id) {

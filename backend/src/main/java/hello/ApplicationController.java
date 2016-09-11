@@ -19,8 +19,8 @@ public class ApplicationController {
     }
 
     @RequestMapping(value = "/structure", method = RequestMethod.POST)
-    public ResponseEntity<StructureEntity> postStructure(@RequestBody String input) {
-        StructureEntity structure = applicationService.postStructure(input);
+    public ResponseEntity<StructureEntity> postStructure(@RequestHeader(value="Structure-Id") String structureId, @RequestBody String input) {
+        StructureEntity structure = applicationService.postStructure(structureId, input);
         return new ResponseEntity<StructureEntity>(structure, HttpStatus.CREATED);
     }
 
