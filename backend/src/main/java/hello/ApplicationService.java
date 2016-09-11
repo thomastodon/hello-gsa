@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static java.util.Collections.emptyList;
-
 @Service
 public class ApplicationService {
 
@@ -30,27 +28,32 @@ public class ApplicationService {
         Map<Integer, NodeEntity> nodeMap = new HashMap<>();
 
         Iterator<String> iterator = lines.iterator();
+
         while (iterator.hasNext()) {
             String fields[] = iterator.next().split(",");
 
-            if (fields[0].equals("NODE")) {
-                NodeEntity node = NodeCsvLineParser.inputToDomain(fields);
-                node.setStructureEntity(structureEntity);
-                nodeMap.put(node.getId(), node);
-            } else if (fields[0].equals("EL")) {
-                // TODO: don't pass the structure to the parser, just set it outside the method
-                // TODO: maybe have a separate StructureParser class
-                ElementEntity element = ElementCsvLineParser.inputToDomain(fields);
-                element.setNode1(nodeMap.get(element.getNode1Id()));
-                element.setNode2(nodeMap.get(element.getNode2Id()));
-                element.setForceMoments(new ArrayList<>());
-                element.setStructureEntity(structureEntity);
-                elementMap.put(element.getId(), element);
-            } else if (fields[0].equals("FORCE")) {
-                ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(structureEntity.getId(), fields);
-                elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
-            } else if (fields[0].equals("MOMENT")) {
-                break;
+            switch (fields[0]) {
+                case "NODE":
+                    NodeEntity node = NodeCsvLineParser.inputToDomain(fields);
+                    node.setStructureEntity(structureEntity);
+                    nodeMap.put(node.getId(), node);
+                    break;
+                case "EL":
+                    // TODO: don't pass the structure to the parser, just set it outside the method
+                    // TODO: maybe have a separate StructureParser class
+                    ElementEntity element = ElementCsvLineParser.inputToDomain(fields);
+                    element.setNode1(nodeMap.get(element.getNode1Id()));
+                    element.setNode2(nodeMap.get(element.getNode2Id()));
+                    element.setForceMoments(new ArrayList<>());
+                    element.setStructureEntity(structureEntity);
+                    elementMap.put(element.getId(), element);
+                    break;
+                case "FORCE":
+                    ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(structureEntity.getId(), fields);
+                    elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
+                    break;
+                case "MOMENT":
+                    break;
             }
         }
 
