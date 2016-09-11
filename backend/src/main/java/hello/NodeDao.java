@@ -23,7 +23,7 @@ public class NodeDao {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
-    public Node findById(String id) {
+    public NodeEntity findById(String id) {
         return jdbcTemplate.queryForObject("SELECT * FROM node " +
                         "WHERE node.id = ?;",
                 new NodeRowMapper(),
@@ -78,11 +78,11 @@ public class NodeDao {
         });
     }
 
-    private class NodeRowMapper implements RowMapper<Node> {
+    private class NodeRowMapper implements RowMapper<NodeEntity> {
         @Override
-        public Node mapRow(ResultSet resultSet, int rowNum)
+        public NodeEntity mapRow(ResultSet resultSet, int rowNum)
                 throws SQLException {
-            Node node = new Node();
+            NodeEntity node = new NodeEntity();
             node.setId(resultSet.getInt("node.id"));
 
             // TODO: use builders for all of the row mappers

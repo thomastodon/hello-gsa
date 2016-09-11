@@ -31,7 +31,7 @@
 //                "3326"
 //        };
 //
-//        Element element = subject.inputToDomain(new Structure(), elementFields);
+//        ElementEntity element = subject.inputToDomain(new Structure(), elementFields);
 //
 //        assertEquals(element.getId(), 2430);
 //        assertEquals(element.getGroupId(), 40);

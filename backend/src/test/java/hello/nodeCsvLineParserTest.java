@@ -34,7 +34,7 @@
 //                "22.3340"
 //        };
 //
-//        Node node = subject.inputToDomain(new Structure(), nodeFields);
+//        NodeEntity node = subject.inputToDomain(new Structure(), nodeFields);
 //
 //        assertThat(node.getId(), is(equalTo(3327)));
 //        assertThat(node.getX(), is(equalTo(16.6620)));

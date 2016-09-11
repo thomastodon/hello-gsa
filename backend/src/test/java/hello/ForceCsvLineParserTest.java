@@ -26,7 +26,7 @@
 //                "276.379"
 //        };
 //
-//        ForceMoment forceMoment = subject.inputToDomain(new Structure(), forceMomentFields);
+//        ForceMomentEntity forceMoment = subject.inputToDomain(new Structure(), forceMomentFields);
 //
 //        assertEquals(forceMoment.getElementId(), 2434);
 //        assertEquals(forceMoment.getResultCaseId(), 13);

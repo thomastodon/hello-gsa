@@ -52,21 +52,21 @@
 //
 //    @Test
 //    public void postStructure_translatesCorrectNumberOfForces() {
-//        Structure structure = subject.postStructure(input);
+//        StructureEntity structure = subject.postStructure(input);
 //
 //        assertThat(structure.getForceMoments().toArray().length, is(equalTo(5)));
 //    }
 //
 //    @Test
 //    public void postStructure_addsCorrectNumberOfNodesToStructure() {
-//        Structure structure = subject.postStructure(input);
+//        StructureEntity structure = subject.postStructure(input);
 //
 //        assertThat(structure.getNodes().toArray().length, is(equalTo(6)));
 //    }
 //
 //    @Test
 //    public void postStructure_addsCorrectNumberOfElementsToStructure() {
-//        Structure structure = subject.postStructure(input);
+//        StructureEntity structure = subject.postStructure(input);
 //
 //        assertThat(structure.getElements().toArray().length, is(equalTo(5)));
 //    }

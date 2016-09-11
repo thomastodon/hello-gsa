@@ -3,8 +3,7 @@ package hello;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ApplicationService {
@@ -24,61 +23,48 @@ public class ApplicationService {
     }
 
     // TODO step1: executor? step 2: rabbit or other MQ?
-    public Structure postStructure(String input) {
+    public StructureEntity postStructure(String input) {
 
         StructureEntity structureEntity = new StructureEntity();
         structureEntity.setId("canopy");
-        structureDao.save(structureEntity);
 
-        String[] lines = input.split("\\r?\\n");
-        int lineNumber = 0;
+        List<String> lines = Arrays.asList(input.split("\\r?\\n"));
 
-        Set<NodeEntity> nodes = new HashSet<>();
-        while (true) {
-            String line = lines[lineNumber];
-            String fields[] = line.split(",");
+        Map<Integer, ElementEntity> elementMap = new HashMap<>();
+        Map<Integer, NodeEntity> nodeMap = new HashMap<>();
+        Map<Integer, List<ForceMomentEntity>> forceMomentMap = new HashMap<>();
+
+        Iterator<String> iterator = lines.iterator();
+        while (iterator.hasNext()) {
+            String fields[] = iterator.next().split(",");
+
             if (fields[0].equals("NODE")) {
                 NodeEntity node = NodeCsvLineParser.inputToDomain(structureEntity.getId(), fields);
-                nodes.add(node);
+                nodeMap.put(node.getId(), node);
             } else if (fields[0].equals("EL")) {
-                nodeDao.save(nodes);
-                break;
-            }
-            lineNumber += 1;
-        }
-
-        Set<ElementEntity> elements = new HashSet<>();
-        while (true) {
-            String line = lines[lineNumber];
-            String fields[] = line.split(",");
-            if (fields[0].equals("EL")) {
-                ElementEntity element = ElementCsvLineParser.inputToDomain(structureEntity.getId(), fields);
-                elements.add(element);
-            } else {
-                elementDao.save(elements);
-                break;
-            }
-            lineNumber += 1;
-        }
-
-        Set<ForceMomentEntity> forceMoments = new HashSet<>();
-        while (true) {
-            String line = lines[lineNumber];
-            String fields[] = line.split(",");
-            if (fields[0].equals("FORCE") && fields[3].equals("0")) {
+                // TODO: don't pass the structure to the parser, just set it outside the method
+                ElementEntity element = ElementCsvLineParser.inputToDomain(fields);
+                element.setNode1(nodeMap.get(element.getNode1Id()));
+                element.setNode2(nodeMap.get(element.getNode2Id()));
+                element.setForceMoments(new ArrayList<>());
+                element.setStructureEntity(structureEntity);
+                elementMap.put(element.getId(), element);
+            } else if (fields[0].equals("FORCE")) {
                 ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(structureEntity.getId(), fields);
-                forceMoments.add(forceMoment);
+                elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
             } else if (fields[0].equals("MOMENT")) {
-                forceMomentDao.save(forceMoments);
                 break;
             }
-            lineNumber += 1;
         }
+
+        structureEntity.setElements(new ArrayList<>(elementMap.values()));
+
+        structureDao.save(structureEntity);
 
         return structureDao.findById("canopy");
     }
 
-    public Structure getStructure(String id) {
+    public StructureEntity getStructure(String id) {
         return structureDao.findById(id);
     }
 }

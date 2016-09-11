@@ -40,10 +40,10 @@
 //
 //    @Test
 //    public void getStructure_delegatesToService() {
-//        Structure expectedStructure = new Structure();
+//        StructureEntity expectedStructure = new StructureEntity();
 //        doReturn(expectedStructure).when(mockApplicationService).getStructure(anyString());
 //
-//        Structure actualStructure = subject.getStructure("tall-building");
+//        StructureEntity actualStructure = subject.getStructure("tall-building");
 //
 //        verify(mockApplicationService).getStructure("tall-building");
 //        assertThat(actualStructure, equalTo(expectedStructure));

@@ -1,18 +1,24 @@
 package hello;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name="structure")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "structure")
 public class StructureEntity {
-    @Id String id;
+    @Id
+    String id;
     long postDate;
     int mass;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "structureEntity")
+    private List<ElementEntity> elements;
 }

@@ -21,7 +21,7 @@ public class ForceMomentDao {
     private JdbcTemplate jdbcTemplate;
 
 //    @Transactional(readOnly = true)
-//    public ForceMoment findById(String id) {
+//    public ForceMomentEntity findById(String id) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM force_moment " +
 //                        "JOIN node node_1 on node_1.id = force_moment.node_1_id " +
 //                        "WHERE force_moment.id = ?;",
@@ -65,11 +65,11 @@ public class ForceMomentDao {
     }
 
 
-    private class ForceMomentRowMapper implements RowMapper<ForceMoment> {
+    private class ForceMomentRowMapper implements RowMapper<ForceMomentEntity> {
         @Override
-        public ForceMoment mapRow(ResultSet resultSet, int rowNum)
+        public ForceMomentEntity mapRow(ResultSet resultSet, int rowNum)
                 throws SQLException {
-            ForceMoment forceMoment = new ForceMoment();
+            ForceMomentEntity forceMoment = new ForceMomentEntity();
 
             // TODO: use builders for all of the row mappers
 

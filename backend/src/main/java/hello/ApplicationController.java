@@ -19,9 +19,9 @@ public class ApplicationController {
     }
 
     @RequestMapping(value = "/structure", method = RequestMethod.POST)
-    public ResponseEntity<Structure> postStructure(@RequestBody String input) {
-        Structure structure = applicationService.postStructure(input);
-        return new ResponseEntity<Structure>(structure, HttpStatus.CREATED);
+    public ResponseEntity<StructureEntity> postStructure(@RequestBody String input) {
+        StructureEntity structure = applicationService.postStructure(input);
+        return new ResponseEntity<StructureEntity>(structure, HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "http://localhost:5000")
@@ -31,8 +31,8 @@ public class ApplicationController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public Structure getStructure(@PathVariable(value = "id") final String id) {
-        Structure structure = applicationService.getStructure(id);
+    public StructureEntity getStructure(@PathVariable(value = "id") final String id) {
+        StructureEntity structure = applicationService.getStructure(id);
         return structure;
     }
 }

@@ -21,7 +21,7 @@ public class ElementDao {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
-    public Element findById(String id) {
+    public ElementEntity findById(String id) {
         return jdbcTemplate.queryForObject("SELECT * FROM element " +
                         "JOIN node node_1 on node_1.id = element.node_1_id " +
                         "JOIN node node_2 on node_2.id = element.node_2_id " +
@@ -49,7 +49,7 @@ public class ElementDao {
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ElementEntity element = elementList.get(i);
 
-                ps.setString(1, element.getStructureId());
+//                ps.setString(1, element.getStructureEntity());
                 ps.setInt(2, element.getId());
                 ps.setInt(3, element.getNode1Id());
                 ps.setInt(4, element.getNode2Id());
@@ -78,7 +78,7 @@ public class ElementDao {
                         "type, " +
                         "group_id" +
                         ") VALUES (?, ?, ?, ?, ?, ?, ?);",
-                elementEntity.getStructureId(),
+//                elementEntity.getStructureId(),
                 elementEntity.getId(),
                 elementEntity.getNode1Id(),
                 elementEntity.getNode2Id(),
@@ -88,11 +88,11 @@ public class ElementDao {
         );
     }
 
-    private class ElementRowMapper implements RowMapper<Element> {
+    private class ElementRowMapper implements RowMapper<ElementEntity> {
         @Override
-        public Element mapRow(ResultSet resultSet, int rowNum)
+        public ElementEntity mapRow(ResultSet resultSet, int rowNum)
                 throws SQLException {
-            Element element = new Element();
+            ElementEntity element = new ElementEntity();
             element.setId(resultSet.getInt("element.id"));
 
             // TODO: use builders for all of the row mappers
