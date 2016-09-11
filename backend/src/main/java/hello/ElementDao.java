@@ -30,64 +30,6 @@ public class ElementDao {
                 id);
     }
 
-    public void save(Set<ElementEntity> elements){
-
-        List<ElementEntity> elementList = new ArrayList<ElementEntity>(elements);
-        String sql = "INSERT INTO element (" +
-                "structure_id, " +
-                "id, " +
-                "node_1_id, " +
-                "node_2_id, " +
-                "section_property_id, " +
-                "type, " +
-                "group_id" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?);";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ElementEntity element = elementList.get(i);
-
-//                ps.setString(1, element.getStructureEntity());
-                ps.setInt(2, element.getId());
-                ps.setInt(3, element.getNode1Id());
-                ps.setInt(4, element.getNode2Id());
-                ps.setInt(5, element.getSectionPropertyId());
-                ps.setString(6, element.getType());
-                ps.setInt(7, element.getGroupId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return elementList.size();
-            }
-        });
-    }
-
-
-    @Transactional
-    void save(ElementEntity elementEntity) {
-        jdbcTemplate.update(
-                "INSERT INTO element (" +
-                        "structure_id, " +
-                        "id, " +
-                        "node_1_id, " +
-                        "node_2_id, " +
-                        "section_property_id, " +
-                        "type, " +
-                        "group_id" +
-                        ") VALUES (?, ?, ?, ?, ?, ?, ?);",
-//                elementEntity.getStructureId(),
-                elementEntity.getId(),
-                elementEntity.getNode1Id(),
-                elementEntity.getNode2Id(),
-                elementEntity.getSectionPropertyId(),
-                elementEntity.getType(),
-                elementEntity.getGroupId()
-        );
-    }
-
     private class ElementRowMapper implements RowMapper<ElementEntity> {
         @Override
         public ElementEntity mapRow(ResultSet resultSet, int rowNum)

@@ -1,11 +1,9 @@
 package hello;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -17,9 +15,11 @@ import java.io.Serializable;
 @Table(name="node")
 public class NodeEntity implements Serializable{
 
+    @JsonIgnore
     @Id
-    @Column(name = "structure_id")
-    private String structureId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "structure_id")
+    private StructureEntity structureEntity;
 
     @Id private int id;
     private Double x;

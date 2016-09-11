@@ -30,54 +30,6 @@ public class NodeDao {
                 id);
     }
 
-    @Transactional
-    void save(NodeEntity nodeEntity) {
-        jdbcTemplate.update(
-                "INSERT INTO node (" +
-                        "structure_id, " +
-                        "id, " +
-                        "x, " +
-                        "y, " +
-                        "z, " +
-                        ") VALUES (?, ?, ?, ?, ?);",
-                nodeEntity.getStructureId(),
-                nodeEntity.getId(),
-                nodeEntity.getX(),
-                nodeEntity.getY(),
-                nodeEntity.getZ()
-        );
-    }
-
-    public void save(Set<NodeEntity> nodes){
-
-        List<NodeEntity> nodeList = new ArrayList<NodeEntity>(nodes);
-        String sql = "INSERT INTO node (" +
-                        "structure_id, " +
-                        "id, " +
-                        "x, " +
-                        "y, " +
-                        "z " +
-                        ") VALUES (?, ?, ?, ?, ?);";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                NodeEntity node = nodeList.get(i);
-
-                ps.setString(1, node.getStructureId());
-                ps.setInt(2, node.getId());
-                ps.setDouble(3, node.getX());
-                ps.setDouble(4, node.getY());
-                ps.setDouble(5, node.getZ());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return nodeList.size();
-            }
-        });
-    }
-
     private class NodeRowMapper implements RowMapper<NodeEntity> {
         @Override
         public NodeEntity mapRow(ResultSet resultSet, int rowNum)

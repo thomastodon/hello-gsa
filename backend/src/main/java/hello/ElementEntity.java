@@ -65,6 +65,9 @@ public class ElementEntity implements Serializable {
     private NodeEntity node2;
 
     @Transient
+    private List<ForceMomentEntity> forceMoments;
+
+    @Transient
     @JsonIgnore
     private int node1Id;
 
@@ -72,8 +75,5 @@ public class ElementEntity implements Serializable {
     @JsonIgnore
     private int node2Id;
 
-    @Transient
-    @JsonIgnore
-    private List<ForceMomentEntity> forceMoments;
 
 }

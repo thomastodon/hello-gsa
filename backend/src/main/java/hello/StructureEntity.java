@@ -1,5 +1,6 @@
 package hello;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,4 +22,8 @@ public class StructureEntity {
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "structureEntity")
     private List<ElementEntity> elements;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "structureEntity")
+    private List<NodeEntity> nodes;
 }

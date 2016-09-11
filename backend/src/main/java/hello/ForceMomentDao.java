@@ -29,40 +29,6 @@ public class ForceMomentDao {
 //                id);
 //    }
 
-    public void save(Set<ForceMomentEntity> forceMoments){
-
-        List<ForceMomentEntity> forceMomentList = new ArrayList<ForceMomentEntity>(forceMoments);
-        String sql = "INSERT INTO force_moment (" +
-                "structure_id, " +
-                "element_id, " +
-                "result_case_id, " +
-                "position, " +
-                "fx, " +
-                "fy, " +
-                "fz" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?);";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ForceMomentEntity forceMoment = forceMomentList.get(i);
-
-                ps.setString(1, forceMoment.getStructureId());
-                ps.setInt(2, forceMoment.getElementId());
-                ps.setInt(3, forceMoment.getResultCaseId());
-                ps.setInt(4, forceMoment.getPosition());
-                ps.setDouble(5, forceMoment.getFx());
-                ps.setDouble(6, forceMoment.getFy());
-                ps.setDouble(7, forceMoment.getFz());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return forceMomentList.size();
-            }
-        });
-    }
 
 
     private class ForceMomentRowMapper implements RowMapper<ForceMomentEntity> {

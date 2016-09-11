@@ -5,25 +5,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 @Service
 public class ApplicationService {
 
-    private final ForceMomentDao forceMomentDao;
     private final StructureDao structureDao;
-    private final ElementDao elementDao;
-    private final NodeDao nodeDao;
 
     @Autowired
     public ApplicationService(
-            ForceMomentDao forceMomentDao, StructureDao structureDao, ElementDao elementDao, NodeDao nodeDao) {
-        this.forceMomentDao = forceMomentDao;
+            StructureDao structureDao) {
         this.structureDao = structureDao;
-        this.elementDao = elementDao;
-        this.nodeDao = nodeDao;
     }
 
     // TODO step1: executor? step 2: rabbit or other MQ?
-    public StructureEntity postStructure(String input) {
+    StructureEntity postStructure(String input) {
 
         StructureEntity structureEntity = new StructureEntity();
         structureEntity.setId("canopy");
@@ -32,17 +28,18 @@ public class ApplicationService {
 
         Map<Integer, ElementEntity> elementMap = new HashMap<>();
         Map<Integer, NodeEntity> nodeMap = new HashMap<>();
-        Map<Integer, List<ForceMomentEntity>> forceMomentMap = new HashMap<>();
 
         Iterator<String> iterator = lines.iterator();
         while (iterator.hasNext()) {
             String fields[] = iterator.next().split(",");
 
             if (fields[0].equals("NODE")) {
-                NodeEntity node = NodeCsvLineParser.inputToDomain(structureEntity.getId(), fields);
+                NodeEntity node = NodeCsvLineParser.inputToDomain(fields);
+                node.setStructureEntity(structureEntity);
                 nodeMap.put(node.getId(), node);
             } else if (fields[0].equals("EL")) {
                 // TODO: don't pass the structure to the parser, just set it outside the method
+                // TODO: maybe have a separate StructureParser class
                 ElementEntity element = ElementCsvLineParser.inputToDomain(fields);
                 element.setNode1(nodeMap.get(element.getNode1Id()));
                 element.setNode2(nodeMap.get(element.getNode2Id()));
@@ -58,13 +55,13 @@ public class ApplicationService {
         }
 
         structureEntity.setElements(new ArrayList<>(elementMap.values()));
-
+        structureEntity.setNodes(new ArrayList<>(nodeMap.values()));
         structureDao.save(structureEntity);
 
         return structureDao.findById("canopy");
     }
 
-    public StructureEntity getStructure(String id) {
+    StructureEntity getStructure(String id) {
         return structureDao.findById(id);
     }
 }
