@@ -16,6 +16,10 @@ import java.util.List;
 @Table(name = "element")
 public class ElementEntity implements Serializable {
 
+    // we're only relying on these annotations to create tables based
+    // on our entities. relationship annotations also create a few
+    // basic indexes
+
     @JsonIgnore
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
