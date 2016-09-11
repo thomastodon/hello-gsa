@@ -1,4 +1,4 @@
-package hello;
+package app;
 
 public class StructureId {
     private final String id;

@@ -1,4 +1,4 @@
-package hello;
+package app;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
