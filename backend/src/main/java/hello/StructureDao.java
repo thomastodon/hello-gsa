@@ -18,13 +18,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class StructureDao {
+class StructureDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // TODO: write some tests for coincident elements
-    // TODO: handle exception deliberately
     @Transactional
     void save(StructureEntity structureEntity) {
         jdbcTemplate.update(
@@ -124,7 +122,7 @@ public class StructureDao {
     }
 
     @Transactional(readOnly = true)
-    public StructureEntity findById(String id) {
+    StructureEntity findById(String id) {
 
         String sql =
                 "SELECT * FROM structure " +
@@ -220,3 +218,5 @@ public class StructureDao {
 }
 
 // TODO: delete structure endpoint
+// TODO: write some tests for coincident elements
+// TODO: handle exception deliberately

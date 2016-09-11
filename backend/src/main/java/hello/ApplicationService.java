@@ -68,7 +68,3 @@ public class ApplicationService {
         return structureDao.findById(id);
     }
 }
-
-// TODO: bulk insertion of records? can JPA do this?
-// TODO: how is JPA joining things?
-// TODO: break out domain and entity layers to manage less code
