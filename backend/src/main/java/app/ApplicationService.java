@@ -53,8 +53,8 @@ public class ApplicationService {
                     elementMap.put(element.getId(), element);
                     break;
                 case "FORCE":
-                    // TODO: don't pass the structure to the parser, just set it outside the method
-                    ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(structureEntity.getId(), fields);
+                    ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(fields);
+                    forceMoment.setStructureId(structureId);
                     elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
                     break;
                 case "MOMENT":

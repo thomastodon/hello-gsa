@@ -5,9 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ForceMomentCsvLineParser {
 
-    public static ForceMomentEntity inputToDomain(String structureId, String[] fields) {
+    public static ForceMomentEntity inputToDomain(String[] fields) {
         ForceMomentEntity forceMoment = new ForceMomentEntity();
-        forceMoment.setStructureId(structureId);
         forceMoment.setElementId(Integer.parseInt(fields[1]));
         forceMoment.setResultCaseId(Integer.parseInt(fields[2]));
         forceMoment.setPosition(Integer.parseInt(fields[3]));
