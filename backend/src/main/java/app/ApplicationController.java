@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ApplicationController {
+class ApplicationController {
 
     private ApplicationService applicationService;
 
     @Autowired
-    public ApplicationController(
+    ApplicationController(
             ApplicationService applicationService
     ) {
         this.applicationService = applicationService;
@@ -31,9 +31,8 @@ public class ApplicationController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public StructureEntity getStructure(@PathVariable(value = "id") final String id) {
-        StructureEntity structure = applicationService.getStructure(id);
-        return structure;
+    StructureEntity getStructure(@PathVariable(value = "id") final String id) {
+        return applicationService.getStructure(id);
     }
 }
 
