@@ -29,16 +29,22 @@ class StructureDao {
 
     @Transactional
     void save(StructureEntity structureEntity) {
+        String sql;
+
+        sql = "INSERT INTO structure (" +
+                "id," +
+                "post_date," +
+                "mass" +
+                ") VALUES (?, ?, ?);";
         jdbcTemplate.update(
-                "INSERT INTO structure (id, post_date, mass)" +
-                        "VALUES (?, ?, ?);",
+                sql,
                 structureEntity.getId(),
                 structureEntity.getPostDate(),
                 structureEntity.getMass()
         );
 
         List<NodeEntity> nodes = structureEntity.getNodes();
-        String sql = "INSERT INTO node (" +
+        sql = "INSERT INTO node (" +
                 "structure_id, " +
                 "id, " +
                 "x, " +
@@ -46,7 +52,6 @@ class StructureDao {
                 "z " +
                 ") VALUES (?, ?, ?, ?, ?);";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 NodeEntity node = nodes.get(i);
