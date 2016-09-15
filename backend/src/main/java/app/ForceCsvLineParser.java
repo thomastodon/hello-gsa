@@ -16,9 +16,3 @@ public class ForceCsvLineParser {
         return forceMoment;
     }
 }
-
-// TODO: can't set element on forceMoment without actual object or
-// TODO: without including the entity manager ...
-// TODO: `Department department = entityManager.getReference(Department.class, departmentId);
-// TODO: user.setDepartment(department);`
-// TODO: ... I would want to manage this at a repository layer somewhere, not in the parser
