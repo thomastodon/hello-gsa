@@ -12,13 +12,13 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="node")
-public class NodeEntity implements Serializable{
+@Table(name = "node")
+public class NodeEntity implements Serializable {
 
     @JsonIgnore
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "structure_id")
+    @JoinColumn(name = "structure_id", referencedColumnName = "id")
     private StructureEntity structureEntity;
 
     @Id private int id;
