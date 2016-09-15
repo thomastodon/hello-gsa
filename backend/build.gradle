@@ -14,7 +14,7 @@ apply plugin: "spring-boot"
 apply plugin: "docker"
 
 jar {
-    baseName = "backend"
+    baseName = "hello-gsa-backend"
     version =  "0.1.0"
 }
 
