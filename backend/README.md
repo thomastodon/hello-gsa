@@ -1,9 +1,15 @@
 # Running Things Locally
 
-get the `DOCKER_HOST` IP via `$ docker-machine env default`
+```bash
+$ docker-compose up
+```
 
-run the `spring` container via `$ docker run -p 8080:8080 --name app-gsa-spring -t app-gsa-spring`
+To query the dev database:
+```bash
+$ mysql -u gaudi --host=localhost -p --protocol=tcp --port=3306
+```
 
-run the `mysql` container via
-
-to ssh into the container: `$ docker exec -it app-gsa-spring sh`
+To query the test database:
+```bash
+$ mysql -u gaudi --host=localhost -p --protocol=tcp --port=3307
+```
