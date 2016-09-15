@@ -20,8 +20,12 @@ import java.util.stream.Collectors;
 @Repository
 class StructureDao {
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public StructureDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Transactional
     void save(StructureEntity structureEntity) {
@@ -126,18 +130,18 @@ class StructureDao {
 
         String sql =
                 "SELECT * FROM structure " +
-                "JOIN element " +
-                "   ON element.structure_id = structure.id " +
-                "JOIN node node_1 " +
-                "   ON node_1.id = element.node_1_id " +
-                "   AND node_1.structure_id = structure.id " +
-                "JOIN node node_2 " +
-                "   ON node_2.id = element.node_2_id " +
-                "   AND node_2.structure_id = structure.id " +
-                "JOIN force_moment " +
-                "   ON force_moment.element_id = element.id " +
-                "   AND force_moment.structure_id = structure.id " +
-                "WHERE structure.id = ?";
+                        "JOIN element " +
+                        "   ON element.structure_id = structure.id " +
+                        "JOIN node node_1 " +
+                        "   ON node_1.id = element.node_1_id " +
+                        "   AND node_1.structure_id = structure.id " +
+                        "JOIN node node_2 " +
+                        "   ON node_2.id = element.node_2_id " +
+                        "   AND node_2.structure_id = structure.id " +
+                        "JOIN force_moment " +
+                        "   ON force_moment.element_id = element.id " +
+                        "   AND force_moment.structure_id = structure.id " +
+                        "WHERE structure.id = ?";
 
         return jdbcTemplate.query(sql, new StructureResultSetExtractor(), id);
     }
