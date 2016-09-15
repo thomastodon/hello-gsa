@@ -3,7 +3,7 @@ package app;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ForceMomentCsvLineParser {
+public class ForceCsvLineParser {
 
     public static ForceMomentEntity inputToDomain(String[] fields) {
         ForceMomentEntity forceMoment = new ForceMomentEntity();

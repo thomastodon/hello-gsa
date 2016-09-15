@@ -18,7 +18,7 @@ public class ForceCsvLineParserTest {
                 "276.379"
         };
 
-        ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(forceMomentFields);
+        ForceMomentEntity forceMoment = ForceCsvLineParser.inputToDomain(forceMomentFields);
 
         assertEquals(forceMoment.getElementId(), 2434);
         assertEquals(forceMoment.getResultCaseId(), 13);

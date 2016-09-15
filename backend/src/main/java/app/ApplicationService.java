@@ -53,7 +53,7 @@ public class ApplicationService {
                     elementMap.put(element.getId(), element);
                     break;
                 case "FORCE":
-                    ForceMomentEntity forceMoment = ForceMomentCsvLineParser.inputToDomain(fields);
+                    ForceMomentEntity forceMoment = ForceCsvLineParser.inputToDomain(fields);
                     forceMoment.setStructureId(structureId);
                     elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
                     break;
