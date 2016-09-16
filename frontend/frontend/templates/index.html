@@ -108,10 +108,11 @@
 					// parse out data from JSON
 					var point1 = data['elements'][i]['node1'];
 					var point2 = data['elements'][i]['node2'];
-					var color = chromaScale(data['elements'][i]['forceMoment']['fx']).hex();
+
+					var color = chromaScale(data['elements'][i]['forces'][1]['fx']).hex();
 					var material = new THREE.LineBasicMaterial({
 				    	color: new THREE.Color(color),
-				    	elementwidth: 8
+				    	elementwidth: 20
 					});
 
 					// store end points
@@ -133,7 +134,7 @@
 
 					// store associated attribute values with element objects
 					// for (i = 2 ; i < (attr.length); i++){
-					element['analysisRes'] = data['elements'][i]['forceMoment'];
+					element['analysisRes'] = data['elements'][i]['forces'][1];
 					// }
 
 					element.prevColor = element.material.color.getHex();
