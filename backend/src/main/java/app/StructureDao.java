@@ -181,7 +181,7 @@ class StructureDao {
                     nodeMap.put(node1Id, node1);
                 }
 
-                Integer node2Id = resultSet.getInt("node_1.id");
+                Integer node2Id = resultSet.getInt("node_2.id");
                 NodeEntity node2 = nodeMap.get(node2Id);
                 if (node2 == null) {
                     node2 = NodeEntity.builder()
@@ -221,5 +221,4 @@ class StructureDao {
             return structure;
         }
     }
-
 }

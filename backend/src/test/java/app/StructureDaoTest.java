@@ -110,6 +110,7 @@ public class StructureDaoTest {
         StructureEntity returnedStructure = structureDao.findById("tall-building");
 
         List<ElementEntity> elements = returnedStructure.getElements();
+
         List<NodeEntity> nodes =  elements.stream()
                 .map(e -> asList(e.getNode1(), e.getNode2()))
                 .flatMap(Collection::stream)
@@ -118,6 +119,7 @@ public class StructureDaoTest {
                 .flatMap(e -> e.getForces().stream())
                 .collect(Collectors.toList());
 
+//        assertThat(structure, new ReflectionEquals(returnedStructure));
         assertThat(elements.size(), is(equalTo(2)));
         assertThat(nodes.size(), is(equalTo(4)));
         assertThat(forces.size(), is(equalTo(2)));
