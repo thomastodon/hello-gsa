@@ -16,8 +16,6 @@ public class ApplicationService {
         this.structureDao = structureDao;
     }
 
-    // TODO: refactor force to force
-    // TODO step1: executor? step 2: rabbit or other MQ?
     StructureEntity postStructure(String structureId, String input) {
         StructureEntity structureEntity = parseStructureCsv(structureId, input);
         structureDao.save(structureEntity);

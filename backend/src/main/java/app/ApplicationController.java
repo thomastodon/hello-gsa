@@ -38,6 +38,3 @@ class ApplicationController {
         return applicationService.getStructure(id);
     }
 }
-
-// TODO: endpoints for other results
-// TODO: get CORS in config

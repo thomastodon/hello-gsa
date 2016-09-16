@@ -169,7 +169,6 @@ class StructureDao {
                             .build();
                 }
 
-                // TODO: collapse node1 and node2 into a list of nodes
                 Integer node1Id = resultSet.getInt("node_1.id");
                 NodeEntity node1 = nodeMap.get(node1Id);
                 if (node1 == null) {
@@ -217,7 +216,6 @@ class StructureDao {
                         .fz(resultSet.getDouble("force_moment.fz"))
                         .build();
                 elementMap.get(elementId).getForces().add(force);
-                // TODO: include forces and moments
             }
             structure.setElements(new ArrayList<>(elementMap.values()));
             return structure;
@@ -225,7 +223,3 @@ class StructureDao {
     }
 
 }
-
-// TODO: delete structure endpoint
-// TODO: write some tests for coincident elements
-// TODO: handle exception deliberately
