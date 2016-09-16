@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "force_moment")
-public class ForceMomentEntity implements Serializable {
+public class ForceEntity implements Serializable {
     @JsonIgnore
     @Id
     private String structureId;

@@ -65,7 +65,7 @@ public class ElementEntity implements Serializable {
     private NodeEntity node2;
 
     @Transient
-    private List<ForceMomentEntity> forceMoments;
+    private List<ForceEntity> forces;
 
     @Transient
     @JsonIgnore

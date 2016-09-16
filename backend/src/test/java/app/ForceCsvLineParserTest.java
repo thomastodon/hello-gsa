@@ -8,7 +8,7 @@ public class ForceCsvLineParserTest {
 
     @Test
     public void inputToDomain_translatesForce() {
-        String[] forceMomentFields = new String[]{
+        String[] forceFields = new String[]{
                 "FORCE",
                 "2434",
                 "13",
@@ -18,13 +18,13 @@ public class ForceCsvLineParserTest {
                 "276.379"
         };
 
-        ForceMomentEntity forceMoment = ForceCsvLineParser.inputToDomain(forceMomentFields);
+        ForceEntity force = ForceCsvLineParser.inputToDomain(forceFields);
 
-        assertEquals(forceMoment.getElementId(), 2434);
-        assertEquals(forceMoment.getResultCaseId(), 13);
-        assertEquals(forceMoment.getPosition(), 1);
-        assertEquals(forceMoment.getFx(), 12107.0, 0);
-        assertEquals(forceMoment.getFy(), 56.8867, 0);
-        assertEquals(forceMoment.getFz(), 276.379, 0);
+        assertEquals(force.getElementId(), 2434);
+        assertEquals(force.getResultCaseId(), 13);
+        assertEquals(force.getPosition(), 1);
+        assertEquals(force.getFx(), 12107.0, 0);
+        assertEquals(force.getFy(), 56.8867, 0);
+        assertEquals(force.getFz(), 276.379, 0);
     }
 }

@@ -97,9 +97,9 @@ class StructureDao {
             }
         });
 
-        List<ForceMomentEntity> forceMoments =
+        List<ForceEntity> forces =
                 elements.stream()
-                        .flatMap(l -> l.getForceMoments().stream())
+                        .flatMap(l -> l.getForces().stream())
                         .collect(Collectors.toList());
         sql = "INSERT INTO force_moment (" +
                 "structure_id, " +
@@ -113,19 +113,19 @@ class StructureDao {
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ForceMomentEntity forceMoment = forceMoments.get(i);
-                ps.setString(1, forceMoment.getStructureId());
-                ps.setInt(2, forceMoment.getElementId());
-                ps.setInt(3, forceMoment.getResultCaseId());
-                ps.setInt(4, forceMoment.getPosition());
-                ps.setDouble(5, forceMoment.getFx());
-                ps.setDouble(6, forceMoment.getFy());
-                ps.setDouble(7, forceMoment.getFz());
+                ForceEntity force = forces.get(i);
+                ps.setString(1, force.getStructureId());
+                ps.setInt(2, force.getElementId());
+                ps.setInt(3, force.getResultCaseId());
+                ps.setInt(4, force.getPosition());
+                ps.setDouble(5, force.getFx());
+                ps.setDouble(6, force.getFy());
+                ps.setDouble(7, force.getFz());
             }
 
             @Override
             public int getBatchSize() {
-                return forceMoments.size();
+                return forces.size();
             }
         });
     }
@@ -204,19 +204,19 @@ class StructureDao {
                             .sectionPropertyId(resultSet.getInt("element.section_property_id"))
                             .groupId(resultSet.getInt("element.group_id"))
                             .type(resultSet.getString("element.type"))
-                            .forceMoments(new ArrayList<>())
+                            .forces(new ArrayList<>())
                             .build();
                     elementMap.put(elementId, element);
                 }
 
-                ForceMomentEntity forceMoment = ForceMomentEntity.builder()
+                ForceEntity force = ForceEntity.builder()
                         .resultCaseId(resultSet.getInt("force_moment.result_case_id"))
                         .position(resultSet.getInt("force_moment.position"))
                         .fx(resultSet.getDouble("force_moment.fx"))
                         .fy(resultSet.getDouble("force_moment.fy"))
                         .fz(resultSet.getDouble("force_moment.fz"))
                         .build();
-                elementMap.get(elementId).getForceMoments().add(forceMoment);
+                elementMap.get(elementId).getForces().add(force);
                 // TODO: include forces and moments
             }
             structure.setElements(new ArrayList<>(elementMap.values()));

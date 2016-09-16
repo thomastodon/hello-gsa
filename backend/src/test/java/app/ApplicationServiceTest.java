@@ -63,11 +63,11 @@ public class ApplicationServiceTest {
 
         StructureEntity structureEntity = subject.parseStructureCsv(structureId, input);
 
-        long forceMomentEntityCount = structureEntity.getElements()
+        long forceEntityCount = structureEntity.getElements()
                 .stream()
-                .flatMap(l -> l.getForceMoments().stream())
+                .flatMap(l -> l.getForces().stream())
                 .count();
-        assertThat(forceMomentEntityCount, is(equalTo(10L)));
+        assertThat(forceEntityCount, is(equalTo(10L)));
     }
 
     @Test

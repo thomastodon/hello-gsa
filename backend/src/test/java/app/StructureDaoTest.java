@@ -55,7 +55,7 @@ public class StructureDaoTest {
                 .build();
         List<NodeEntity> nodes = asList(nodeA, nodeB);
 
-        ForceMomentEntity forceA = ForceMomentEntity.builder()
+        ForceEntity forceA = ForceEntity.builder()
                 .elementId(43)
                 .structureId("tall-building")
                 .position(0)
@@ -64,7 +64,7 @@ public class StructureDaoTest {
                 .fy(8675d)
                 .fz(2845d)
                 .build();
-        ForceMomentEntity forceB = ForceMomentEntity.builder()
+        ForceEntity forceB = ForceEntity.builder()
                 .elementId(43)
                 .structureId("tall-building")
                 .position(1)
@@ -73,7 +73,7 @@ public class StructureDaoTest {
                 .fy(5628d)
                 .fz(0849d)
                 .build();
-        List<ForceMomentEntity> forces = asList(forceA, forceB);
+        List<ForceEntity> forces = asList(forceA, forceB);
 
         ElementEntity elementB = ElementEntity.builder()
                 .structureEntity(structure)
@@ -83,7 +83,7 @@ public class StructureDaoTest {
                 .groupId(40)
                 .sectionPropertyId(101)
                 .type("BAR")
-                .forceMoments(emptyList())
+                .forces(emptyList())
                 .build();
         ElementEntity elementA = ElementEntity.builder()
                 .structureEntity(structure)
@@ -93,7 +93,7 @@ public class StructureDaoTest {
                 .groupId(30)
                 .sectionPropertyId(101)
                 .type("BEAM")
-                .forceMoments(forces)
+                .forces(forces)
                 .build();
         List<ElementEntity> elements = asList(elementA, elementB);
 
@@ -114,8 +114,8 @@ public class StructureDaoTest {
                 .map(e -> asList(e.getNode1(), e.getNode2()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
-        List<ForceMomentEntity> forces =  elements.stream()
-                .flatMap(e -> e.getForceMoments().stream())
+        List<ForceEntity> forces =  elements.stream()
+                .flatMap(e -> e.getForces().stream())
                 .collect(Collectors.toList());
 
         assertThat(elements.size(), is(equalTo(2)));

@@ -16,7 +16,7 @@ public class ApplicationService {
         this.structureDao = structureDao;
     }
 
-    // TODO: refactor forceMoment to force
+    // TODO: refactor force to force
     // TODO step1: executor? step 2: rabbit or other MQ?
     StructureEntity postStructure(String structureId, String input) {
         StructureEntity structureEntity = parseStructureCsv(structureId, input);
@@ -48,14 +48,14 @@ public class ApplicationService {
                     ElementEntity element = ElementCsvLineParser.inputToDomain(fields);
                     element.setNode1(nodeMap.get(element.getNode1Id()));
                     element.setNode2(nodeMap.get(element.getNode2Id()));
-                    element.setForceMoments(new ArrayList<>());
+                    element.setForces(new ArrayList<>());
                     element.setStructureEntity(structureEntity);
                     elementMap.put(element.getId(), element);
                     break;
                 case "FORCE":
-                    ForceMomentEntity forceMoment = ForceCsvLineParser.inputToDomain(fields);
-                    forceMoment.setStructureId(structureId);
-                    elementMap.get(forceMoment.getElementId()).getForceMoments().add(forceMoment);
+                    ForceEntity force = ForceCsvLineParser.inputToDomain(fields);
+                    force.setStructureId(structureId);
+                    elementMap.get(force.getElementId()).getForces().add(force);
                     break;
                 case "MOMENT":
                     break;
