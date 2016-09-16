@@ -84,8 +84,8 @@ class StructureDao {
                 ElementEntity element = elements.get(i);
                 ps.setString(1, structureEntity.getId());
                 ps.setInt(2, element.getId());
-                ps.setInt(3, element.getNode1Id());
-                ps.setInt(4, element.getNode2Id());
+                ps.setInt(3, element.getNode1().getId());
+                ps.setInt(4, element.getNode2().getId());
                 ps.setInt(5, element.getSectionPropertyId());
                 ps.setString(6, element.getType());
                 ps.setInt(7, element.getGroupId());
@@ -143,7 +143,7 @@ class StructureDao {
                         "JOIN node node_2 " +
                         "   ON node_2.id = element.node_2_id " +
                         "   AND node_2.structure_id = structure.id " +
-                        "JOIN force_moment " +
+                        "LEFT JOIN force_moment " +
                         "   ON force_moment.element_id = element.id " +
                         "   AND force_moment.structure_id = structure.id " +
                         "WHERE structure.id = ?";

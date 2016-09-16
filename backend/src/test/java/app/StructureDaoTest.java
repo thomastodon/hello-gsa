@@ -1,5 +1,6 @@
 package app;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -25,38 +29,97 @@ public class StructureDaoTest {
 
     @Autowired
     private StructureDao structureDao;
+    private StructureEntity structure;
+
+    @Before
+    public void setup() {
+        structure = StructureEntity.builder()
+                .id("tall-building")
+                .postDate(6345696785L)
+                .mass(343)
+                .build();
+
+        NodeEntity nodeA = NodeEntity.builder()
+                .id(28)
+                .structureEntity(structure)
+                .x(3421d)
+                .y(13412d)
+                .z(123d)
+                .build();
+        NodeEntity nodeB = NodeEntity.builder()
+                .id(83)
+                .structureEntity(structure)
+                .x(9864d)
+                .y(4523d)
+                .z(253d)
+                .build();
+        List<NodeEntity> nodes = asList(nodeA, nodeB);
+
+        ForceMomentEntity forceA = ForceMomentEntity.builder()
+                .elementId(43)
+                .structureId("tall-building")
+                .position(0)
+                .resultCaseId(65)
+                .fx(234d)
+                .fy(8675d)
+                .fz(2845d)
+                .build();
+        ForceMomentEntity forceB = ForceMomentEntity.builder()
+                .elementId(43)
+                .structureId("tall-building")
+                .position(1)
+                .resultCaseId(65)
+                .fx(2453d)
+                .fy(5628d)
+                .fz(0849d)
+                .build();
+        List<ForceMomentEntity> forces = asList(forceA, forceB);
+
+        ElementEntity elementB = ElementEntity.builder()
+                .structureEntity(structure)
+                .id(62)
+                .node1(nodeA)
+                .node2(nodeB)
+                .groupId(40)
+                .sectionPropertyId(101)
+                .type("BAR")
+                .forceMoments(emptyList())
+                .build();
+        ElementEntity elementA = ElementEntity.builder()
+                .structureEntity(structure)
+                .id(93)
+                .node1(nodeA)
+                .node2(nodeB)
+                .groupId(30)
+                .sectionPropertyId(101)
+                .type("BEAM")
+                .forceMoments(forces)
+                .build();
+        List<ElementEntity> elements = asList(elementA, elementB);
+
+        structure.setNodes(nodes);
+        structure.setElements(elements);
+    }
 
     @Test
     @Transactional
     @Rollback(true)
-    public void save() {
-
-        NodeEntity nodeA = NodeEntity.builder().id(28).build();
-        NodeEntity nodeB = NodeEntity.builder().id(83).build();
-        List<NodeEntity> nodes = Arrays.asList(nodeA, nodeB);
-
-        ForceMomentEntity forceA = ForceMomentEntity.builder().elementId(43).fx(234d).build();
-        ForceMomentEntity forceB = ForceMomentEntity.builder().elementId(43).fx(3097d).build();
-        List<ForceMomentEntity> forces = Arrays.asList(forceA, forceB);
-
-        ElementEntity elementB = ElementEntity.builder().id(62).build();
-        ElementEntity elementA = ElementEntity.builder().id(43).forceMoments(forces).build();
-        List<ElementEntity> elements = Arrays.asList(elementA, elementB);
-
-        StructureEntity structure = StructureEntity.builder()
-                .id("tall-building")
-                .postDate(6345696785L)
-                .mass(343)
-                .elements(elements)
-                .nodes(nodes)
-                .build();
-
+    public void save_correctNumberOfEntitiesArePersisted() {
         structureDao.save(structure);
 
         StructureEntity returnedStructure = structureDao.findById("tall-building");
 
-        assertThat(returnedStructure.getElements().size(), is(equalTo(2)));
-        assertThat(returnedStructure.getNodes().size(), is(equalTo(2)));
-        assertThat(returnedStructure.getElements().get(0).getForceMoments().size(), is(equalTo(2)));
+        List<ElementEntity> elements = returnedStructure.getElements();
+        List<NodeEntity> nodes =  elements.stream()
+                .map(e -> asList(e.getNode1(), e.getNode2()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        List<ForceMomentEntity> forces =  elements.stream()
+                .flatMap(e -> e.getForceMoments().stream())
+                .collect(Collectors.toList());
+
+        assertThat(elements.size(), is(equalTo(2)));
+        assertThat(nodes.size(), is(equalTo(4)));
+        assertThat(forces.size(), is(equalTo(2)));
     }
 }
