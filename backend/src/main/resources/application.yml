@@ -10,4 +10,7 @@ spring:
 
 server.port: 8081
 
-allowed-origins: http://localhost:5000
+endpoints:
+  cors:
+    allowed-origins: http://localhost:5000,*
+    allow-credentials: true

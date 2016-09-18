@@ -1,6 +1,7 @@
 package app;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,6 @@ class ApplicationController {
         return new ResponseEntity<StructureEntity>(structure, HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "http://localhost:5000")
     @RequestMapping(
             value = "/structure/{id}",
             method = RequestMethod.GET,
