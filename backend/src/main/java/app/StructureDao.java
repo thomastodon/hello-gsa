@@ -11,11 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 @Repository
 class StructureDao {
@@ -146,8 +145,8 @@ class StructureDao {
                         "LEFT JOIN force_moment " +
                         "   ON force_moment.element_id = element.id " +
                         "   AND force_moment.structure_id = structure.id " +
-                        "WHERE structure.id = ?";
-
+                        "WHERE structure.id = ? " +
+                        "ORDER BY element.id DESC";
         return jdbcTemplate.query(sql, new StructureResultSetExtractor(), id);
     }
 
@@ -208,17 +207,32 @@ class StructureDao {
                     elementMap.put(elementId, element);
                 }
 
-                ForceEntity force = ForceEntity.builder()
-                        .resultCaseId(resultSet.getInt("force_moment.result_case_id"))
-                        .position(resultSet.getInt("force_moment.position"))
-                        .fx(resultSet.getDouble("force_moment.fx"))
-                        .fy(resultSet.getDouble("force_moment.fy"))
-                        .fz(resultSet.getDouble("force_moment.fz"))
-                        .build();
-                elementMap.get(elementId).getForces().add(force);
+
+                Integer forceElementId = resultSet.getInt("force_moment.element_id");
+                if (forceElementId != 0) {
+                    ForceEntity force = ForceEntity.builder()
+                            .structureId(structure.getId())
+                            .elementId(forceElementId)
+                            .resultCaseId(resultSet.getInt("force_moment.result_case_id"))
+                            .position(resultSet.getInt("force_moment.position"))
+                            .fx(resultSet.getDouble("force_moment.fx"))
+                            .fy(resultSet.getDouble("force_moment.fy"))
+                            .fz(resultSet.getDouble("force_moment.fz"))
+                            .build();
+                    elementMap.get(forceElementId).getForces().add(force);
+                }
             }
             structure.setElements(new ArrayList<>(elementMap.values()));
+
+            List<NodeEntity> nodes =  structure.getElements().stream()
+                .map(e -> asList(e.getNode1(), e.getNode2()))
+                .flatMap(Collection::stream)
+                .sorted((p1, p2) -> p1.getId() - p2.getId())
+                .collect(Collectors.toList());
+            structure.setNodes(nodes);
+
             return structure;
         }
     }
+
 }

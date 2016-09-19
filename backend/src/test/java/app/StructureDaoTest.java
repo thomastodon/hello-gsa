@@ -11,15 +11,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
@@ -41,22 +37,32 @@ public class StructureDaoTest {
 
         NodeEntity nodeA = NodeEntity.builder()
                 .id(28)
-                .structureEntity(structure)
                 .x(3421d)
                 .y(13412d)
                 .z(123d)
                 .build();
         NodeEntity nodeB = NodeEntity.builder()
+                .id(32)
+                .x(826d)
+                .y(874d)
+                .z(83576d)
+                .build();
+        NodeEntity nodeC = NodeEntity.builder()
+                .id(75)
+                .x(2398d)
+                .y(4252d)
+                .z(8606d)
+                .build();
+        NodeEntity nodeD = NodeEntity.builder()
                 .id(83)
-                .structureEntity(structure)
                 .x(9864d)
                 .y(4523d)
                 .z(253d)
                 .build();
-        List<NodeEntity> nodes = asList(nodeA, nodeB);
+        List<NodeEntity> nodes = asList(nodeA, nodeB, nodeC, nodeD);
 
         ForceEntity forceA = ForceEntity.builder()
-                .elementId(43)
+                .elementId(93)
                 .structureId("tall-building")
                 .position(0)
                 .resultCaseId(65)
@@ -65,7 +71,7 @@ public class StructureDaoTest {
                 .fz(2845d)
                 .build();
         ForceEntity forceB = ForceEntity.builder()
-                .elementId(43)
+                .elementId(93)
                 .structureId("tall-building")
                 .position(1)
                 .resultCaseId(65)
@@ -76,7 +82,6 @@ public class StructureDaoTest {
         List<ForceEntity> forces = asList(forceA, forceB);
 
         ElementEntity elementB = ElementEntity.builder()
-                .structureEntity(structure)
                 .id(62)
                 .node1(nodeA)
                 .node2(nodeB)
@@ -86,10 +91,9 @@ public class StructureDaoTest {
                 .forces(emptyList())
                 .build();
         ElementEntity elementA = ElementEntity.builder()
-                .structureEntity(structure)
                 .id(93)
-                .node1(nodeA)
-                .node2(nodeB)
+                .node1(nodeC)
+                .node2(nodeD)
                 .groupId(30)
                 .sectionPropertyId(101)
                 .type("BEAM")
@@ -109,19 +113,6 @@ public class StructureDaoTest {
 
         StructureEntity returnedStructure = structureDao.findById("tall-building");
 
-        List<ElementEntity> elements = returnedStructure.getElements();
-
-        List<NodeEntity> nodes =  elements.stream()
-                .map(e -> asList(e.getNode1(), e.getNode2()))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        List<ForceEntity> forces =  elements.stream()
-                .flatMap(e -> e.getForces().stream())
-                .collect(Collectors.toList());
-
-//        assertThat(structure, new ReflectionEquals(returnedStructure));
-        assertThat(elements.size(), is(equalTo(2)));
-        assertThat(nodes.size(), is(equalTo(4)));
-        assertThat(forces.size(), is(equalTo(2)));
+        assertThat(returnedStructure).isEqualToComparingFieldByFieldRecursively(structure);
     }
 }

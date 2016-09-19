@@ -19,6 +19,7 @@ public class ForceEntity implements Serializable {
     @JsonIgnore
     @Id
     private String structureId;
+
     @JsonIgnore
     @Id
     private int elementId;
